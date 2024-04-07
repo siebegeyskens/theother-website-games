@@ -1,0 +1,27 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.wheel-container {
+  max-width: 1295px;
+  max-height: 1295px;
+  margin: 0 auto;
+  /* position relative in order to position the marker */
+  position: relative;
+}
+
+.marker {
+  position: absolute;
+  top: 45px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+}
+
+.wheel {
+  /* As wide as wrapping div */
+  width: 100%;
+  height: 100%;
+}
