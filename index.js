@@ -1,6 +1,5 @@
 // Immediately invoked function expression to not pollute the global scope.
 (function () {
-  const wheel = document.getElementById("wheel");
   let degrees = 0;
   let degreesMin = 500;
   let degreesMax = 3000;
@@ -30,15 +29,18 @@
     20: "SMART marketing",
   };
 
+  const wheel = document.getElementById("wheel");
+  const button = document.getElementById("button");
+
   function handleWin(degrees) {
     console.log(degrees);
     const winningService = Math.ceil(degrees / zoneSize);
     alert(serviceZones[winningService]);
   }
 
-  wheel.addEventListener("click", () => {
+  button.addEventListener("click", () => {
     // Disable the button while spinning
-    wheel.style.pointerEvents = "none";
+    button.style.pointerEvents = "none";
     // Calculate a new rotation between degreesMin and degreesMax
     degrees = Math.floor(degreesMin + Math.random() * (degreesMax - degreesMin));
     // Calculate how long the wheels spins based on how far it spins
@@ -48,17 +50,21 @@
     spinningTime = mapNumRange(degrees, degreesMin, degreesMax, timeMin, timeMax);
     // Set the transition on the wheel
     wheel.style.transition = `all ${spinningTime}s ease-out`;
+    // button.style.transition = `all ${spinningTime}s ease-out`;
     // Rotate the wheel
     wheel.style.transform = `rotate(${degrees}deg)`;
+    // button.style.transform = `rotate(${degrees}deg)`;
   });
 
   wheel.addEventListener("transitionend", () => {
     // Enable button events when spin is over
-    wheel.style.pointerEvents = "auto";
+    button.style.pointerEvents = "auto";
     // Set to the weel to a "natural" 360 degree value
     wheel.style.transition = "none";
+    // button.style.transition = "none";
     const degreesNormalized = degrees % 360;
     wheel.style.transform = `rotate(${degreesNormalized}deg)`;
+    // button.style.transform = `rotate(${degreesNormalized}deg)`;
     // Calculate the winning service
     handleWin(degreesNormalized);
   });
