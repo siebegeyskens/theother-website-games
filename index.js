@@ -1,11 +1,12 @@
 // Immediately invoked function expression to not pollute the global scope.
 (function () {
-  // wheel spinning parameters
+  // default wheel spinning options
   const options = {
-    degreesMin: 500, // degrees
-    degreesMax: 3000, // degrees
-    timeMin: 2, // seconds
-    timeMax: 6, // seconds
+    degreesMin: 500, // Minimum wheel turns (degrees)
+    degreesMax: 2500, // Maximum wheel turns (degrees)
+    durationMin: 2.5, // seconds
+    durationMax: 4, // seconds
+    transitionTimingFunction: "cubic-bezier(0.25, 0, 0.17, 0.99)",
   };
 
   let degrees;
@@ -36,14 +37,15 @@
 
   const wheel = document.getElementById("wheel");
   const button = document.getElementById("button");
+  const marker = document.getElementById("marker");
 
   // Calculate how long the wheels spins based on how far it spins
   function calculateSpinningTime(degrees) {
     //https://www.30secondsofcode.org/js/s/clamp-or-map-number-to-range/
     return (
-      ((degrees - options.degreesMin) * (options.timeMax - options.timeMin)) /
+      ((degrees - options.degreesMin) * (options.durationMax - options.durationMin)) /
         (options.degreesMax - options.degreesMin) +
-      options.timeMin
+      options.durationMin
     );
   }
 
@@ -57,9 +59,13 @@
     degreesNormalized = degrees % 360;
     spinningTime = calculateSpinningTime(degrees);
     // Set the transition on the wheel
-    wheel.style.transition = `all ${spinningTime}s ease-out`;
+    wheel.style.transition = `all ${spinningTime}s`;
+    wheel.style.transitionTimingFunction = options.transitionTimingFunction;
     // Rotate the wheel
     wheel.style.transform = `rotate(${degrees}deg)`;
+
+    // Configure marker animation
+    marker.style.animation = `Marker ${spinningTime}s ${options.transitionTimingFunction} both`;
   }
 
   function resetWheel(degrees) {
@@ -68,6 +74,9 @@
     // Set to the weel to a "natural" 360 degree value
     wheel.style.transition = "none";
     wheel.style.transform = `rotate(${degreesNormalized}deg)`;
+
+    // Reset marker animation.
+    marker.style.animation = "none";
   }
 
   function handleWin(degrees) {
