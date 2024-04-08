@@ -8,38 +8,58 @@
   </head>
   <body>
     <section class="wheel-section">
-      <img
-        class="background"
-        src="./images/background.png"
-        alt="Background made up of a the sky and some mountainpeaks."
-      />
+      <picture>
+        <source srcset="./images/background.webp" type="image/webp" />
+        <source srcset="./imgages/background-min.png" type="image/png" />
+        <img
+          src="./imges/background.webp"
+          alt="Background made up of a the sky and some mountainpeaks."
+          class="background"
+        />
+      </picture>
       <div class="container">
         <div class="wheel-container">
-          <img
-            class="wheel"
-            id="wheel"
-            src="./images/wheel.png"
-            alt="A wheel of fortune listing The Other's services."
-          />
-          <img
-            class="marker"
-            id="marker"
-            src="./images/marker.png"
-            alt="The pin or marker of the fortune wheel."
-          />
-          <img
-            class="button"
-            id="button"
-            src="./images/button.png"
-            alt="Button to start turning the fortune wheel."
-          />
+          <picture>
+            <source srcset="./images/wheel.webp" type="image/webp" />
+            <source srcset="./imgages/wheel-min.png" type="image/png" />
+            <img
+              src="./imges/wheel.webp"
+              alt="A wheel of fortune listing The Other's services."
+              class="wheel"
+              id="wheel"
+            />
+          </picture>
+          <picture>
+            <source srcset="./images/marker.webp" type="image/webp" />
+            <source srcset="./imgages/marker-min.png" type="image/png" />
+            <img
+              src="./imges/wheel.webp"
+              alt="The pin or marker of the fortune wheel."
+              class="marker"
+              id="marker"
+            />
+          </picture>
+          <picture>
+            <source srcset="./images/button.webp" type="image/webp" />
+            <source srcset="./imgages/button-min.png" type="image/png" />
+            <img
+              src="./imges/wheel.webp"
+              alt="Button to start turning the fortune wheel."
+              class="button"
+              id="button"
+            />
+          </picture>
         </div>
       </div>
-      <img
-        class="foreground"
-        src="./images/foreground.png"
-        alt="Foreground made up of a desert town and snowy mountains."
-      />
+      <picture>
+        <source srcset="./images/foreground.webp" type="image/webp" />
+        <source srcset="./imgages/foreground-min.png" type="image/png" />
+        <img
+          src="./imges/wheel.webp"
+          alt="Foreground made up of a desert town and snowy mountains."
+          class="foreground"
+        />
+      </picture>
     </section>
     <script src="./index.js"></script>
   </body>
