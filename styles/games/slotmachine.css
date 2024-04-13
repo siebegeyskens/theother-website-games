@@ -1,0 +1,6 @@
+/* main container */
+
+.game-slotmachine {
+  height: 100vh;
+  background-image: url("../../images/games/slotmachine/background.png");
+}

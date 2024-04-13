@@ -3,64 +3,68 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>THEOTHER - Wheel Of Fortune</title>
-    <link rel="stylesheet" href="./styles.css" />
+    <title>THEOTHER - Website Games</title>
+    <link rel="stylesheet" href="./styles/layout.css" />
+    <link rel="stylesheet" href="./styles/games/wheel.css" />
+    <link rel="stylesheet" href="./styles/games/slotmachine.css" />
   </head>
   <body>
-    <section class="wheel-section">
+    <section class="game-wheel">
       <picture>
-        <source srcset="./images/background.webp" type="image/webp" />
-        <source srcset="./imgages/background-min.png" type="image/png" />
+        <source srcset="./images/games/wheel/background.webp" type="image/webp" />
+        <source srcset="./images/games/wheel/background-min.png" type="image/png" />
         <img
           src="./imges/background.webp"
           alt="Background made up of a the sky and some mountainpeaks."
-          class="background"
+          class="game-wheel-background"
         />
       </picture>
-      <div class="container">
-        <div class="wheel-container">
+      <div class="game-wheel-container-outer">
+        <div class="game-wheel-container-inner">
           <picture>
-            <source srcset="./images/wheel.webp" type="image/webp" />
-            <source srcset="./imgages/wheel-min.png" type="image/png" />
+            <source srcset="./images/games/wheel/wheel.webp" type="image/webp" />
+            <source srcset="./images/games/wheel/wheel-min.png" type="image/png" />
             <img
               src="./imges/wheel.webp"
               alt="A wheel of fortune listing The Other's services."
-              class="wheel"
-              id="wheel"
+              class="game-wheel-wheel"
+              id="game-wheel-wheel"
             />
           </picture>
           <picture>
-            <source srcset="./images/marker.webp" type="image/webp" />
-            <source srcset="./imgages/marker-min.png" type="image/png" />
+            <source srcset="./images/games/wheel/marker.webp" type="image/webp" />
+            <source srcset="./images/games/wheel/marker-min.png" type="image/png" />
             <img
               src="./imges/wheel.webp"
               alt="The pin or marker of the fortune wheel."
-              class="marker"
-              id="marker"
+              class="game-wheel-marker"
+              id="game-wheel-marker"
             />
           </picture>
           <picture>
-            <source srcset="./images/button.webp" type="image/webp" />
-            <source srcset="./imgages/button-min.png" type="image/png" />
+            <source srcset="./images/games/wheel/button.webp" type="image/webp" />
+            <source srcset="./images/games/wheel/button-min.png" type="image/png" />
             <img
               src="./imges/wheel.webp"
               alt="Button to start turning the fortune wheel."
-              class="button"
-              id="button"
+              class="game-wheel-button"
+              id="game-wheel-button"
             />
           </picture>
         </div>
       </div>
       <picture>
-        <source srcset="./images/foreground.webp" type="image/webp" />
-        <source srcset="./imgages/foreground-min.png" type="image/png" />
+        <source srcset="./images/games/wheel/foreground.webp" type="image/webp" />
+        <source srcset="./images/games/wheel/foreground-min.png" type="image/png" />
         <img
           src="./imges/wheel.webp"
           alt="Foreground made up of a desert town and snowy mountains."
-          class="foreground"
+          class="game-wheel-foreground"
         />
       </picture>
     </section>
-    <script src="./index.js"></script>
+    <section class="game-slotmachine"></section>
+    <script src="./js/games/wheel.js"></script>
+    <script src="./js/games/slotmachine.js"></script>
   </body>
 </html>
