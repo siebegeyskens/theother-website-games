@@ -1,6 +1,63 @@
+/* debug */
+
+.debug {
+  position: absolute;
+  left: 0;
+  width: auto;
+  height: 100vh;
+}
+
+:root {
+  --n-symbols: 11;
+  --symbols-image: "../../images/games/slotmachine/reel-symbols.png";
+}
+
 /* main container */
 
 .game-slotmachine {
-  height: 100vh;
   background-image: url("../../images/games/slotmachine/background.png");
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Slot machine background (images) */
+
+.game-slotmachine-container {
+  position: relative;
+  width: 60%;
+}
+
+.game-slotmachine-img {
+  position: absolute;
+  width: 100%;
+}
+
+.game-slotmachine-img--relative {
+  position: relative;
+}
+
+/* Slot machine foregroung (symbol containers) */
+
+.game-slotmachine-reels {
+  top: 50%;
+  left: 47%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+  position: absolute;
+  width: 72%;
+  height: 59%;
+  /* background-color: rgba(255, 0, 0, 0.266); */
+  border: 1px solid red;
+  display: flex;
+  gap: 8%;
+}
+
+.game-slotmachine-reel {
+  border: 1px solid red;
+  flex-grow: 1;
+  background-image: url(../../images/games/slotmachine/reel-symbols.png);
+  background-size: cover;
+  background-position-y: calc(-100% / var(--n-symbols) / 2);
 }
