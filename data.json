@@ -1,57 +1,57 @@
 {
   "projects": [
     {
-      "name": "PROJECT 1",
+      "name": "Ekozarcek",
       "year": 2016,
       "service": "SERVICE"
     },
     {
-      "name": "PROJECT 2",
+      "name": "Vinakoper",
       "year": 2018,
       "service": "SERVICE"
     },
     {
-      "name": "PROJECT 3",
+      "name": "žalec",
       "year": 2019,
       "service": "SERVICE"
     },
     {
-      "name": "PROJECT 4",
+      "name": "Harvest",
       "year": 2017,
       "service": "SERVICE"
     },
     {
-      "name": "PROJECT 5",
+      "name": "Philips",
       "year": 2020,
       "service": "SERVICE"
     },
     {
-      "name": "PROJECT 6",
+      "name": "Polymetrija",
       "year": 2015,
       "service": "SERVICE"
     },
     {
-      "name": "PROJECT 7",
+      "name": "Vivalis",
       "year": 2022,
       "service": "SERVICE"
     },
     {
-      "name": "PROJECT 8",
+      "name": "Orbico",
       "year": 2014,
       "service": "SERVICE"
     },
     {
-      "name": "PROJECT 9",
+      "name": "Bg",
       "year": 2023,
       "service": "SERVICE"
     },
     {
-      "name": "PROJECT 10",
+      "name": "Supernova",
       "year": 2013,
       "service": "SERVICE"
     },
     {
-      "name": "PROJECT 11",
+      "name": "Floramare",
       "year": 2021,
       "service": "SERVICE"
     }

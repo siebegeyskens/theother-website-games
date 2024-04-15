@@ -7,11 +7,6 @@
   height: 100vh;
 }
 
-:root {
-  --n-symbols: 11;
-  --symbols-image: "../../images/games/slotmachine/reel-symbols.png";
-}
-
 /* main container */
 
 .game-slotmachine {
@@ -38,6 +33,10 @@
   position: relative;
 }
 
+#game-slotmachine-btn {
+  z-index: 100;
+}
+
 /* Slot machine foregroung (symbol containers) */
 
 .game-slotmachine-reels {
@@ -49,15 +48,16 @@
   width: 72%;
   height: 59%;
   /* background-color: rgba(255, 0, 0, 0.266); */
-  border: 1px solid red;
+  /* border: 1px solid red; */
   display: flex;
   gap: 8%;
 }
 
 .game-slotmachine-reel {
-  border: 1px solid red;
+  /* background-color: rgba(255, 0, 0, 0.266); */
+  /* border: 1px solid red; */
   flex-grow: 1;
   background-image: url(../../images/games/slotmachine/reel-symbols.png);
   background-size: cover;
-  background-position-y: calc(-100% / var(--n-symbols) / 2);
+  /* background-position-y: calc(-100% / var(--n-symbols) / 2); */
 }
