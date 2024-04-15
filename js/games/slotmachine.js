@@ -163,8 +163,6 @@
     Promise.all(reels.map((reel, i) => roll(reel, i, guaranteedWinMode))).then((symbolOffsets) => {
       isRolling = false;
 
-      setLeverUp();
-
       // Update the winline
       symbolOffsets.forEach(
         (symbolOffset, i) => (indexes[i] = (indexes[i] + symbolOffset) % numSymbols)
@@ -175,6 +173,8 @@
         const winningProject = projects[indexes[0]];
         window.alert(JSON.stringify(winningProject));
       }
+
+      setLeverUp();
     });
   }
 
@@ -214,6 +214,16 @@
     leverDown.style.display = "none";
   }
 
+  function setSymbolPositions(reels, indexes) {
+    reels.forEach((reel, i) => {
+      // Calculate the new background position for the reel based on the current index
+      const newPosition = `calc((${reelHeight} - ${symbolHeight}) / 2 - (${indexes[i]} * ${symbolHeight}))`;
+      // Set the new background position (without transition)
+      reel.style.transition = "none";
+      reel.style.backgroundPositionY = newPosition;
+    });
+  }
+
   function handleButtonClick() {
     // Check if all symbols were already shown, if so, reset guaranteedWinMode index
     if (guaranteedWinMode && winningSymbolIndex >= numSymbols) {
@@ -227,10 +237,7 @@
     toggleGuaranteedWinMode();
   }
 
-  // Event listener for window resize
-  window.addEventListener("resize", () => {
-    // TODO: Find out how to set the reels based on the current reel dimensions and current indexes.
-
+  function handleWindowResize() {
     if (isRolling) {
       window.location.reload();
     }
@@ -238,17 +245,11 @@
     // Update reel dimensions
     getReelDimensions(reels);
 
-    // Loop through each reel
-    // Calculate the new background position for the reel based on the current index
-    // Set the new background position (without animation)
-    reels.forEach((reel, i) => {
-      const newPosition = `calc((${reelHeight} - ${symbolHeight}) / 2 - (${indexes[i]} * ${symbolHeight}))`;
-      // Set the new background position (without transition)
-      reel.style.transition = "none";
-      reel.style.backgroundPositionY = newPosition;
-    });
-  });
+    // Update symbol positions based on current dimensions and indexes
+    setSymbolPositions(reels, indexes);
+  }
 
+  window.addEventListener("resize", handleWindowResize);
   btn.addEventListener("click", handleButtonClick);
 
   initializeSlotMachine();

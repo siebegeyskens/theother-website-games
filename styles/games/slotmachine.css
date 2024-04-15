@@ -21,7 +21,9 @@
 
 .game-slotmachine-container {
   position: relative;
-  width: 60%;
+  width: 30%;
+  max-width: 600px;
+  /* min-width: 500px; */
 }
 
 .game-slotmachine-img {
@@ -40,6 +42,8 @@
 .game-slotmachine-btn {
   animation: 1.5s ease-out infinite Blink;
   cursor: pointer;
+  width: 9.7%;
+  right: 0;
 }
 
 /* Slot machine foregroung (symbol containers) */
@@ -48,7 +52,7 @@
   top: 50%;
   left: 47%;
   transform: translate(-50%, -50%);
-  z-index: 1000;
+  z-index: 10;
   position: absolute;
   width: 72%;
   height: 59%;
@@ -65,6 +69,30 @@
   background-image: url(../../images/games/slotmachine/reel-symbols.png);
   background-size: cover;
   /* background-position-y: calc(-100% / var(--n-symbols) / 2); */
+}
+
+/* Media queries */
+
+/* Above 1920px (large desktops) */
+@media (min-width: 1921px) {
+  .game-slotmachine {
+    background-size: cover;
+  }
+}
+
+/* Below 1200px (landscape tablets) */
+@media (max-width: 1200px) {
+  .game-slotmachine-container {
+    width: 500px;
+  }
+}
+
+/* Below 560px (mobile) */
+@media (max-width: 560px) {
+  .game-slotmachine {
+    width: 100%;
+    padding: 0 32px;
+  }
 }
 
 /* Animations */
