@@ -1,12 +1,22 @@
-# Wheel Of Fortune - THE OTHER
+# Website Games - THE OTHER
 
-Wheel of fortune interaction for THE OTHER website. Live demo on [https://the-other-wheel-of-fortune.netlify.app/](https://the-other-wheel-of-fortune.netlify.app/)
+Custom games / interactions for THE OTHER website. Live demo on [https://the-other-wheel-of-fortune.netlify.app/](https://the-other-wheel-of-fortune.netlify.app/)
 
-## Features
+## Wheel Of Fortune
 
-- Allows users to spin the wheel of fortune.
 - Displays different services based on where the wheel stops spinning.
 
-## Usage
+### Usage
 
 - Adjustable default spinning options (`degreesMin`, `degreesMax`, `durationMin`, `durationMax`, `transitionTimingFunction`) at the top of `index.js` to fit your specific requirements.
+
+## Slot Machine
+
+- working simulation of a slot machine, with three reels rolling random and able to check for winlines.
+- The slotmachine uses symbols resembling THE OTHER's projects.
+- Each second try the slotmachine is set to win, allowing to show the project details.
+- Each win guarantees to show a different project, untill all projects are shown.
+
+### Usage
+
+- Loads in symbols and project information from a JSON file.

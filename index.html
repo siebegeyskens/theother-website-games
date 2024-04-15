@@ -65,41 +65,63 @@
     </section>
     <section class="game-slotmachine">
       <div class="game-slotmachine-container">
-        <img
-          id="game-slotmachine-btn"
-          class="game-slotmachine-img game-slotmachine-btn"
-          src="./images/games/slotmachine/btn-lever-up.png"
-          alt="Blinking button on top of the lever"
-          usemap="#image-map"
-        />
-        <img
-          class="game-slotmachine-img game-slotmachine-iron"
-          src="./images/games/slotmachine/slot-machine-iron.png"
-          alt="Blinking button on top of the lever"
-          usemap="#image-map"
-        />
-        <img
-          id="game-slotmachine-lever"
-          class="game-slotmachine-img game-slotmachine-lever"
-          src="./images/games/slotmachine/lever-up.png"
-          alt="Lever of a slot machine"
-        />
-        <img
-          id="game-slotmachine-lever-down"
-          class="game-slotmachine-img"
-          src="./images/games/slotmachine/lever-down.png"
-          alt="Lever of a slot machine"
-        />
+        <picture>
+          <source srcset="./images/games/slotmachine/btn-lever-up.webp" type="image/webp" />
+          <source srcset="./images/games/slotmachine/lever-up.png" type="image/png" />
+          <img
+            id="game-slotmachine-btn"
+            class="game-slotmachine-img game-slotmachine-btn"
+            src="./images/games/slotmachine/btn-lever-up.webp"
+            alt="Blinking button on top of the lever"
+          />
+        </picture>
+        <picture>
+          <source srcset="./images/games/slotmachine/slot-machine-iron.webp" type="image/webp" />
+          <source srcset="./images/games/slotmachine/slot-machine-iron.png" type="image/png" />
+          <img
+            class="game-slotmachine-img game-slotmachine-iron"
+            src="./images/games/slotmachine/slot-machine-iron.png"
+            alt="Blinking button on top of the lever"
+            usemap="#image-map"
+          />
+        </picture>
+        <picture>
+          <source srcset="./images/games/slotmachine/lever-up.webp" type="image/webp" />
+          <source srcset="./images/games/slotmachine/lever-up.png" type="image/png" />
+          <img
+            id="game-slotmachine-lever"
+            class="game-slotmachine-img game-slotmachine-lever"
+            src="./images/games/slotmachine/lever-up.png"
+            alt="Lever of a slot machine"
+          />
+        </picture>
+        <picture>
+          <source srcset="../images/games/slotmachine/lever-down.webp" type="image/webp" />
+          <source srcset="./images/games/slotmachine/lever-down.png" type="image/png" />
+          <img
+            id="game-slotmachine-lever-down"
+            class="game-slotmachine-img game-slotmachine-invisible"
+            src="./images/games/slotmachine/lever-down.png"
+            alt="Lever of a slot machine"
+          />
+        </picture>
         <div class="game-slotmachine-reels">
           <div class="game-slotmachine-reel"></div>
           <div class="game-slotmachine-reel"></div>
           <div class="game-slotmachine-reel"></div>
         </div>
-        <img
-          class="game-slotmachine-img game-slotmachine-img--relative"
-          src="./images/games/slotmachine/slot-machine.png"
-          alt="Main part of a slot machine including the reels"
-        />
+        <picture>
+          <source srcset="./images/games/slotmachine/slot-machine.webp" type="image/webp" />
+          <source srcset="./images/games/slotmachine/slot-machine.png" type="image/png" />
+          <img
+            class="game-slotmachine-img game-slotmachine-img--relative"
+            src="./images/games/slotmachine/slot-machine.png"
+            alt="Main part of a slot machine including the reels"
+          />
+        </picture>
+      </div>
+      <div class="game-slotmachine-text-container">
+        <p>Project information</p>
       </div>
     </section>
     <script src="./js/games/wheel.js"></script>

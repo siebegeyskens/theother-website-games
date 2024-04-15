@@ -2,19 +2,24 @@
 
 .game-slotmachine {
   background-image: url("../../images/games/slotmachine/background.png");
-  height: 100vh;
+  @supports (background-image: url("../../images/games/slotmachine/background.webp")) {
+    background-image: url("../../images/games/slotmachine/background.webp");
+  }
+  background-size: cover;
+  /* height: 70vh; */
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
+  padding: 128px 0;
 }
 
-/* Slot machine background (images) */
+/* Slot machine (images) */
 
 .game-slotmachine-container {
   position: relative;
   width: 30%;
   max-width: 600px;
-  /* min-width: 500px; */
 }
 
 .game-slotmachine-img {
@@ -37,7 +42,15 @@
   right: 0;
 }
 
-/* Slot machine foregroung (symbol containers) */
+.game-slotmachine-iron {
+  z-index: 100;
+}
+
+.game-slotmachine-invisible {
+  display: none;
+}
+
+/* Slot machine reels */
 
 .game-slotmachine-reels {
   top: 50%;
@@ -47,23 +60,13 @@
   position: absolute;
   width: 72%;
   height: 57.9%;
-  /* background-color: rgba(255, 0, 0, 0.266); */
-  /* border: 1px solid red; */
   display: flex;
   gap: 8%;
 }
 
-.game-slotmachine-iron {
-  z-index: 100;
-}
-
 .game-slotmachine-reel {
-  /* background-color: rgba(255, 0, 0, 0.266); */
-  /* border: 1px solid red; */
   flex-grow: 1;
-  background-image: url(../../images/games/slotmachine/reel-symbols.png);
   background-size: cover;
-  /* background-position-y: calc(-100% / var(--n-symbols) / 2); */
   position: relative;
 }
 
@@ -80,13 +83,11 @@
   z-index: 10000;
 }
 
-/* Media queries */
+/* Project information */
 
-/* Above 1920px (large desktops) */
-@media (min-width: 1921px) {
-  .game-slotmachine {
-    background-size: cover;
-  }
+.game-slotmachine-text-container {
+  background-color: black;
+  color: white;
 }
 
 /* Below 1200px (landscape tablets) */
@@ -98,9 +99,12 @@
 
 /* Below 560px (mobile) */
 @media (max-width: 560px) {
-  .game-slotmachine {
+  .game-slotmachine-container {
     width: 100%;
-    padding: 0 32px;
+  }
+
+  .game-slotmachine {
+    padding: 128px 32px;
   }
 }
 

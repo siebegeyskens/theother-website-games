@@ -1,5 +1,6 @@
 (function () {
   const jsonData = `{
+    "symbolsImageSource": "../../images/games/slotmachine/reel-symbols.png",
         "projects": [
           {
             "name": "Ekozarcek",
@@ -65,6 +66,7 @@
   const data = JSON.parse(jsonData);
   const projects = data.projects.reverse(); // Reverse the projects array, the slotmachine counts from bottom to top.
   const numSymbols = projects.length;
+  const symbolsImageSource = data.symbolsImageSource;
   let indexes = [0, 0, 0]; // Array to keep track of the winline
   let reelHeight; // Height of each reel (pixels)
   let symbolHeight; // Height of each symbol (percentage)
@@ -188,30 +190,16 @@
     guaranteedWinMode = !guaranteedWinMode;
   }
 
-  function initializeSlotMachine() {
-    // Update variables based on reel properties
-    getReelDimensions(reels);
-    // Set the symbol in the middle of the reel instead of at the top.
-    setStartOffset(reels);
-    // Start the reels at a random offset (without animation)
-    timePerSymbol = 0;
-    rollAll(reels, (guaranteedWinMode = false));
-    // Reset speed
-    timePerSymbol = 100;
-    // Create array to keep track of winning array
-    createWinningSymbolIndexes();
-  }
-
   function setLeverDown() {
-    btn.style.display = "none";
-    lever.style.display = "none";
-    leverDown.style.display = "block";
+    btn.classList.add("game-slotmachine-invisible");
+    lever.classList.add("game-slotmachine-invisible");
+    leverDown.classList.remove("game-slotmachine-invisible");
   }
 
   function setLeverUp() {
-    btn.style.display = "block";
-    lever.style.display = "block";
-    leverDown.style.display = "none";
+    btn.classList.remove("game-slotmachine-invisible");
+    lever.classList.remove("game-slotmachine-invisible");
+    leverDown.classList.add("game-slotmachine-invisible");
   }
 
   function setSymbolPositions(reels, indexes) {
@@ -221,6 +209,13 @@
       // Set the new background position (without transition)
       reel.style.transition = "none";
       reel.style.backgroundPositionY = newPosition;
+    });
+  }
+
+  function loadSymbolImages() {
+    reels.forEach((reel) => {
+      reel.style.backgroundImage = `url(${symbolsImageSource})`;
+      console.dir(reel);
     });
   }
 
@@ -247,6 +242,21 @@
 
     // Update symbol positions based on current dimensions and indexes
     setSymbolPositions(reels, indexes);
+  }
+
+  function initializeSlotMachine() {
+    loadSymbolImages();
+    // Update variables based on reel properties
+    getReelDimensions(reels);
+    // Set the symbol in the middle of the reel instead of at the top.
+    setStartOffset(reels);
+    // Start the reels at a random offset (without animation)
+    timePerSymbol = 0;
+    rollAll(reels, (guaranteedWinMode = false));
+    // Reset speed
+    timePerSymbol = 100;
+    // Create array to keep track of winning array
+    createWinningSymbolIndexes();
   }
 
   window.addEventListener("resize", handleWindowResize);
