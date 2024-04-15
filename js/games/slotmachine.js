@@ -69,6 +69,7 @@
   let guaranteedWinMode = false; // Flag for guaranteedWinMode mode
   let winningSymbolIndexes = []; // Array to keep track of the winning symbols
   let winningSymbolIndex = 0; // Current winning symbol
+  let isRolling = false;
 
   const reels = Array.from(document.getElementsByClassName("game-slotmachine-reel"));
   const btn = document.getElementById("game-slotmachine-btn");
@@ -99,13 +100,14 @@
   }
 
   // Function to update reel variables.
-  function updateVariables(reels) {
+  function getReelDimensions(reels) {
     reelHeight = getComputedStyle(reels[0])["height"];
     symbolHeight = `calc((100% - ${reelHeight}) / ${numSymbols})`;
   }
 
   // Set initial background position for reels
   // Places the symbols in the middle of the reel, instead of at the top.
+  // Uses CSS calc function with the current height of the reel (div containter) and the symbolHeight
   function setStartOffset(reels) {
     reels.forEach((reel) => {
       reel.style.backgroundPositionY = `calc((${reelHeight} - ${symbolHeight}) / 2)`;
@@ -152,7 +154,10 @@
   }
 
   function rollAll(reels, guaranteedWinMode) {
+    isRolling = true;
     Promise.all(reels.map((reel, i) => roll(reel, i, guaranteedWinMode))).then((symbolOffsets) => {
+      isRolling = false;
+
       // Enable button events after all reels finish rolling
       btn.style.pointerEvents = "auto";
 
@@ -181,7 +186,7 @@
 
   function initializeSlotMachine() {
     // Update variables based on reel properties
-    updateVariables(reels);
+    getReelDimensions(reels);
     // Set the symbol in the middle of the reel instead of at the top.
     setStartOffset(reels);
     // Start the reels at a random offset (without animation)
@@ -209,8 +214,24 @@
 
   // Event listener for window resize
   window.addEventListener("resize", () => {
-    updateVariables(reels);
-    // TODO: set positions based on the indexes
+    // TODO: Find out how to set the reels based on the current reel dimensions and current indexes.
+
+    if (isRolling) {
+      window.location.reload();
+    }
+
+    // Update reel dimensions
+    getReelDimensions(reels);
+
+    // Loop through each reel
+    // Calculate the new background position for the reel based on the current index
+    // Set the new background position (without animation)
+    reels.forEach((reel, i) => {
+      const newPosition = `calc((${reelHeight} - ${symbolHeight}) / 2 - (${indexes[i]} * ${symbolHeight}))`;
+      // Set the new background position (without transition)
+      reel.style.transition = "none";
+      reel.style.backgroundPositionY = newPosition;
+    });
   });
 
   btn.addEventListener("click", handleButtonClick);
