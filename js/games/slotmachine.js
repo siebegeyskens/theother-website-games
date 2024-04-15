@@ -215,7 +215,6 @@
   function loadSymbolImages() {
     reels.forEach((reel) => {
       reel.style.backgroundImage = `url(${symbolsImageSource})`;
-      console.dir(reel);
     });
   }
 

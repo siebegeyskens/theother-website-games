@@ -1,6 +1,6 @@
 # Website Games - THE OTHER
 
-Custom games / interactions for THE OTHER website. Live demo on [https://the-other-wheel-of-fortune.netlify.app/](https://the-other-wheel-of-fortune.netlify.app/)
+Custom games / interactions for THE OTHER website. Live demo on [THEOTHER - Website Games](https://the-other-website-games.netlify.app/)
 
 ## Wheel Of Fortune
 
