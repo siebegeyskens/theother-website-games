@@ -59,6 +59,9 @@
         ]
       }`;
 
+  //
+  // Slotmachine + reel variables
+  //
   const data = JSON.parse(jsonData);
   const projects = data.projects.reverse(); // Reverse the projects array, the slotmachine counts from bottom to top.
   const numSymbols = projects.length;
@@ -73,6 +76,8 @@
 
   const reels = Array.from(document.getElementsByClassName("game-slotmachine-reel"));
   const btn = document.getElementById("game-slotmachine-btn");
+  const lever = document.getElementById("game-slotmachine-lever");
+  const leverDown = document.getElementById("game-slotmachine-lever-down");
 
   // https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
   function shuffle(array) {
@@ -158,8 +163,7 @@
     Promise.all(reels.map((reel, i) => roll(reel, i, guaranteedWinMode))).then((symbolOffsets) => {
       isRolling = false;
 
-      // Enable button events after all reels finish rolling
-      btn.style.pointerEvents = "auto";
+      setLeverUp();
 
       // Update the winline
       symbolOffsets.forEach(
@@ -198,13 +202,24 @@
     createWinningSymbolIndexes();
   }
 
+  function setLeverDown() {
+    btn.style.display = "none";
+    lever.style.display = "none";
+    leverDown.style.display = "block";
+  }
+
+  function setLeverUp() {
+    btn.style.display = "block";
+    lever.style.display = "block";
+    leverDown.style.display = "none";
+  }
+
   function handleButtonClick() {
-    // Disable the button while rolling
-    btn.style.pointerEvents = "none";
     // Check if all symbols were already shown, if so, reset guaranteedWinMode index
     if (guaranteedWinMode && winningSymbolIndex >= numSymbols) {
       createWinningSymbolIndexes();
     }
+    setLeverDown();
     // Roll the reels
     rollAll(reels, guaranteedWinMode);
 

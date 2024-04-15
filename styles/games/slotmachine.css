@@ -37,6 +37,11 @@
   z-index: 100;
 }
 
+.game-slotmachine-btn {
+  animation: 1.5s ease-out infinite Blink;
+  cursor: pointer;
+}
+
 /* Slot machine foregroung (symbol containers) */
 
 .game-slotmachine-reels {
@@ -60,4 +65,24 @@
   background-image: url(../../images/games/slotmachine/reel-symbols.png);
   background-size: cover;
   /* background-position-y: calc(-100% / var(--n-symbols) / 2); */
+}
+
+/* Animations */
+
+@keyframes Blink {
+  0% {
+    /* opacity: 1; */
+    filter: brightness(1);
+  }
+
+  50% {
+    /* opacity: .5; */
+    filter: brightness(1.75) drop-shadow(0 0 10px #ff000025) drop-shadow(0 0 30px #ff000025)
+      drop-shadow(0 0 50px #ff000025);
+  }
+
+  100% {
+    /* opacity: 1; */
+    filter: brightness(1);
+  }
 }
