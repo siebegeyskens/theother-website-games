@@ -75,6 +75,7 @@
   let winningSymbolIndexes = []; // Array to keep track of the winning symbols
   let winningSymbolIndex = 0; // Current winning symbol
   let isRolling = false;
+  let resizedDuringRoll = false;
 
   const reels = Array.from(document.getElementsByClassName("game-slotmachine-reel"));
   const btn = document.getElementById("game-slotmachine-btn");
@@ -103,7 +104,6 @@
     // Shuffle the array so it's not in the same order every time.
     // Ex: [6, 4, 0, 1, 2, 5, 7, 3, 10, 8, 9]
     shuffle(winningSymbolIndexes);
-    winningSymbolIndex = 0;
   }
 
   // Function to update reel variables.
@@ -121,8 +121,10 @@
     });
   }
 
+  // TODO: split into two functions
+  // Calculate number of symbols that come by.
   function calculateSymbolOffset(offset, guaranteedWinMode) {
-    // Number of symbols that come by. Always two full rotations + offset. Example, if offset is 2, the reel will have 4 full rotations.
+    // Always two full rotations + offset. Example, if offset is 2, the reel will have 4 full rotations.
     let symbolOffset = (offset + 2) * numSymbols;
     // Based on the current backgroundposition, calculate how much the reel needs to rotate to land on the winning index.
     if (guaranteedWinMode) {
@@ -145,39 +147,52 @@
       symbolOffset * timePerSymbol
     }ms cubic-bezier(.45,.05,.58,1.06)`;
     reel.style.backgroundPositionY = targetBackgroundPositionY;
-  }
-
-  // Function that animates one reel, this way we can have a delay for the other reel.
-  function roll(reel, offset = 0, guaranteedWinMode) {
-    const symbolOffset = calculateSymbolOffset(offset, guaranteedWinMode);
-    const targetBackgroundPositionY = calculateTargetBackgroundPositionY(reel, symbolOffset);
-    animateReel(reel, symbolOffset, targetBackgroundPositionY);
-    // Return a promise which resolves when the reels finishes rolling.
     return new Promise((resolve, reject) => {
       setTimeout(() => {
-        resolve(symbolOffset % numSymbols);
+        resolve();
       }, symbolOffset * timePerSymbol);
     });
   }
 
-  function rollAll(reels, guaranteedWinMode) {
+  function rollReels(reels, guaranteedWinMode) {
     isRolling = true;
-    Promise.all(reels.map((reel, i) => roll(reel, i, guaranteedWinMode))).then((symbolOffsets) => {
-      isRolling = false;
 
-      // Update the winline
-      symbolOffsets.forEach(
-        (symbolOffset, i) => (indexes[i] = (indexes[i] + symbolOffset) % numSymbols)
-      );
+    let symbolOffsets = [];
+    let targetBackgroundPositions = [];
+    let symbolOffsetsNorm = [];
 
-      // check win conditions
-      if (indexes[0] === indexes[1] && indexes[0] === indexes[2]) {
-        const winningProject = projects[indexes[0]];
-        window.alert(JSON.stringify(winningProject));
-      }
-
-      setLeverUp();
+    // Calculate reels
+    reels.forEach((reel, i) => {
+      symbolOffsets[i] = calculateSymbolOffset(i, guaranteedWinMode);
+      targetBackgroundPositions[i] = calculateTargetBackgroundPositionY(reel, symbolOffsets[i]);
+      symbolOffsetsNorm[i] = symbolOffsets[i] % numSymbols;
     });
+
+    Promise.all(
+      reels.map((reel, i) => animateReel(reel, symbolOffsets[i], targetBackgroundPositions[i]))
+    )
+      .then(() => {
+        isRolling = false;
+        if (resizedDuringRoll) {
+          resizedDuringRoll = false;
+          throw "Cancel roll!";
+        } else {
+          // Update the indexes
+          symbolOffsetsNorm.forEach(
+            (symbolOffsetNorm, i) => (indexes[i] = (indexes[i] + symbolOffsetNorm) % numSymbols)
+          );
+          setLeverUp();
+          // check win conditions
+          if (indexes[0] === indexes[1] && indexes[0] === indexes[2]) {
+            const winningProject = projects[indexes[0]];
+            document.getElementById("game-slotmachine-text").innerText =
+              JSON.stringify(winningProject);
+          }
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   }
 
   function toggleGuaranteedWinMode() {
@@ -212,7 +227,7 @@
     });
   }
 
-  function loadSymbolImages() {
+  function setBackgroundImagesSource() {
     reels.forEach((reel) => {
       reel.style.backgroundImage = `url(${symbolsImageSource})`;
     });
@@ -222,44 +237,42 @@
     // Check if all symbols were already shown, if so, reset guaranteedWinMode index
     if (guaranteedWinMode && winningSymbolIndex >= numSymbols) {
       createWinningSymbolIndexes();
+      winningSymbolIndex = 0;
     }
     setLeverDown();
     // Roll the reels
-    rollAll(reels, guaranteedWinMode);
-
+    rollReels(reels, guaranteedWinMode);
     // Toggle guaranteedWinMode mode
     toggleGuaranteedWinMode();
   }
 
   function handleWindowResize() {
+    // set back to last position if resized during roll
     if (isRolling) {
-      window.location.reload();
+      //window.location.reload();
+      resizedDuringRoll = true;
+      setLeverUp();
     }
-
     // Update reel dimensions
     getReelDimensions(reels);
-
     // Update symbol positions based on current dimensions and indexes
     setSymbolPositions(reels, indexes);
   }
 
   function initializeSlotMachine() {
-    loadSymbolImages();
+    setBackgroundImagesSource();
     // Update variables based on reel properties
     getReelDimensions(reels);
-    // Set the symbol in the middle of the reel instead of at the top.
-    setStartOffset(reels);
-    // Start the reels at a random offset (without animation)
-    timePerSymbol = 0;
-    rollAll(reels, (guaranteedWinMode = false));
-    // Reset speed
-    timePerSymbol = 100;
+    // setStartOffset(reels);
+    setSymbolPositions(reels, [1, 2, 3]);
+    indexes = [1, 2, 3];
     // Create array to keep track of winning array
     createWinningSymbolIndexes();
   }
 
   window.addEventListener("resize", handleWindowResize);
   btn.addEventListener("click", handleButtonClick);
-
-  initializeSlotMachine();
+  window.onload = () => {
+    initializeSlotMachine();
+  };
 })();
