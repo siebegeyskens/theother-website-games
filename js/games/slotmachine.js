@@ -76,6 +76,7 @@
   let winningSymbolIndex = 0; // Current winning symbol
   let isRolling = false;
   let resizedDuringRoll = false;
+  let animationRejects = []; // To keep track of the reject methods of the promises for reel animations
 
   const reels = Array.from(document.getElementsByClassName("game-slotmachine-reel"));
   const btn = document.getElementById("game-slotmachine-btn");
@@ -142,6 +143,19 @@
     return `calc(${backgroundPositionY} - calc(${symbolOffset} * ${symbolHeight}`;
   }
 
+  // reject all the animationPromises
+  function cancelPendingAnimations() {
+    animationRejects.forEach((reject) => {
+      reject("Cancelled due to resize!");
+    });
+    animationRejects = [];
+  }
+
+  function showProject() {
+    const winningProject = projects[indexes[0]];
+    document.getElementById("game-slotmachine-text").innerText = JSON.stringify(winningProject);
+  }
+
   function animateReel(reel, symbolOffset, targetBackgroundPositionY) {
     reel.style.transition = `background-position-y ${
       symbolOffset * timePerSymbol
@@ -151,48 +165,41 @@
       setTimeout(() => {
         resolve();
       }, symbolOffset * timePerSymbol);
+      // Save the reject function
+      animationRejects.push(reject);
     });
   }
 
-  function rollReels(reels, guaranteedWinMode) {
+  async function rollReels(reels, guaranteedWinMode) {
     isRolling = true;
 
-    let symbolOffsets = [];
-    let targetBackgroundPositions = [];
-    let symbolOffsetsNorm = [];
+    try {
+      const symbolOffsets = [];
 
-    // Calculate reels
-    reels.forEach((reel, i) => {
-      symbolOffsets[i] = calculateSymbolOffset(i, guaranteedWinMode);
-      targetBackgroundPositions[i] = calculateTargetBackgroundPositionY(reel, symbolOffsets[i]);
-      symbolOffsetsNorm[i] = symbolOffsets[i] % numSymbols;
-    });
+      const animationPromises = reels.map((reel, i) => {
+        const symbolOffset = calculateSymbolOffset(i, guaranteedWinMode);
+        symbolOffsets.push(symbolOffset);
+        const targetBackgroundPositionY = calculateTargetBackgroundPositionY(reel, symbolOffset);
 
-    Promise.all(
-      reels.map((reel, i) => animateReel(reel, symbolOffsets[i], targetBackgroundPositions[i]))
-    )
-      .then(() => {
-        isRolling = false;
-        if (resizedDuringRoll) {
-          resizedDuringRoll = false;
-          throw "Cancel roll!";
-        } else {
-          // Update the indexes
-          symbolOffsetsNorm.forEach(
-            (symbolOffsetNorm, i) => (indexes[i] = (indexes[i] + symbolOffsetNorm) % numSymbols)
-          );
-          setLeverUp();
-          // check win conditions
-          if (indexes[0] === indexes[1] && indexes[0] === indexes[2]) {
-            const winningProject = projects[indexes[0]];
-            document.getElementById("game-slotmachine-text").innerText =
-              JSON.stringify(winningProject);
-          }
-        }
-      })
-      .catch((err) => {
-        console.error(err);
+        return animateReel(reel, symbolOffset, targetBackgroundPositionY);
       });
+
+      await Promise.all(animationPromises);
+
+      // Update the indexes
+      reels.forEach((reel, i) => (indexes[i] = (indexes[i] + symbolOffsets[i]) % numSymbols));
+      console.log(indexes);
+      setLeverUp();
+
+      // check win condition
+      if (indexes.every((index) => index === indexes[0])) {
+        showProject();
+      }
+    } catch (err) {
+      // reject message
+    } finally {
+      isRolling = false;
+    }
   }
 
   function toggleGuaranteedWinMode() {
@@ -247,10 +254,8 @@
   }
 
   function handleWindowResize() {
-    // set back to last position if resized during roll
     if (isRolling) {
-      //window.location.reload();
-      resizedDuringRoll = true;
+      cancelPendingAnimations();
       setLeverUp();
     }
     // Update reel dimensions
@@ -259,13 +264,20 @@
     setSymbolPositions(reels, indexes);
   }
 
+  // set the starting index to a randomly, but not winning
+  function initIndexes() {
+    let randomIndex = Math.floor(Math.random() * numSymbols);
+    console.log(randomIndex);
+    indexes = reels.map((_, i) => (randomIndex + i) % numSymbols);
+  }
   function initializeSlotMachine() {
     setBackgroundImagesSource();
     // Update variables based on reel properties
     getReelDimensions(reels);
     // setStartOffset(reels);
-    setSymbolPositions(reels, [1, 2, 3]);
-    indexes = [1, 2, 3];
+    initIndexes();
+    console.log(indexes);
+    setSymbolPositions(reels, indexes);
     // Create array to keep track of winning array
     createWinningSymbolIndexes();
   }
