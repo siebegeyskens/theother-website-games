@@ -324,8 +324,8 @@
   }
 
   window.addEventListener("resize", handleWindowResize);
-  btn.addEventListener("click", handleButtonClick);
   window.onload = () => {
     initializeSlotMachine();
+    btn.addEventListener("click", handleButtonClick);
   };
 })();

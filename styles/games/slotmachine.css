@@ -1,7 +1,8 @@
 /* main container */
 
 .game-slotmachine {
-  background-image: url("../../images/games/slotmachine/background-letters.jpg");
+  background-image: url("../../images/games/slotmachine/background-letters.jpg"),
+    url("../../images/games/slotmachine/background-stars.jpg");
   background-size: cover;
   display: flex;
   justify-content: center;
