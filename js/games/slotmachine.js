@@ -188,7 +188,6 @@
 
       // Update the indexes
       reels.forEach((reel, i) => (indexes[i] = (indexes[i] + symbolOffsets[i]) % numSymbols));
-      console.log(indexes);
       setLeverUp();
 
       // check win condition
@@ -267,7 +266,6 @@
   // set the starting index to a randomly, but not winning
   function initIndexes() {
     let randomIndex = Math.floor(Math.random() * numSymbols);
-    console.log(randomIndex);
     indexes = reels.map((_, i) => (randomIndex + i) % numSymbols);
   }
   function initializeSlotMachine() {
@@ -276,7 +274,6 @@
     getReelDimensions(reels);
     // setStartOffset(reels);
     initIndexes();
-    console.log(indexes);
     setSymbolPositions(reels, indexes);
     // Create array to keep track of winning array
     createWinningSymbolIndexes();
