@@ -1,12 +1,8 @@
 /* main container */
 
 .game-slotmachine {
-  background-image: url("../../images/games/slotmachine/background.png");
-  @supports (background-image: url("../../images/games/slotmachine/background.webp")) {
-    background-image: url("../../images/games/slotmachine/background.webp");
-  }
+  background-image: url("../../images/games/slotmachine/background-letters.jpg");
   background-size: cover;
-  /* height: 70vh; */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -86,14 +82,24 @@
 /* Project information */
 
 .game-slotmachine-text-container {
-  background-color: black;
-  color: white;
+  color: #52ba2b;
+  font-family: "Pixelify Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
+  font-size: 52px;
+  text-transform: uppercase;
+  text-align: center;
 }
 
 /* Below 1200px (landscape tablets) */
 @media (max-width: 1200px) {
   .game-slotmachine-container {
     width: 500px;
+  }
+
+  .game-slotmachine-text-container {
+    font-size: 40px;
   }
 }
 
@@ -105,6 +111,10 @@
 
   .game-slotmachine {
     padding: 128px 32px;
+  }
+
+  .game-slotmachine-text-container {
+    font-size: 28px;
   }
 }
 

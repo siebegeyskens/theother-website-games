@@ -82,6 +82,8 @@
   const btn = document.getElementById("game-slotmachine-btn");
   const lever = document.getElementById("game-slotmachine-lever");
   const leverDown = document.getElementById("game-slotmachine-lever-down");
+  const projectText = document.getElementById("game-slotmachine-text");
+  const containerBackground = document.getElementById("game-slotmachine");
 
   // https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
   function shuffle(array) {
@@ -153,7 +155,28 @@
 
   function showProject() {
     const winningProject = projects[indexes[0]];
-    document.getElementById("game-slotmachine-text").innerText = JSON.stringify(winningProject);
+    projectText.style.transition = "none";
+    projectText.style.opacity = 1;
+    projectText.innerText = `projekt ${winningProject.name} ${winningProject.year}`;
+  }
+
+  function hideProject() {
+    projectText.style.transition = "opacity 1s";
+    projectText.style.opacity = 0;
+  }
+
+  function animateBackgroundLettersOff(symbolOffset) {
+    // Use the symbolOffset of the last reel so that the background animation ends when all the reels stop spinning.
+    const duration = symbolOffset * timePerSymbol;
+    containerBackground.style.transition = `background-image ${duration}ms`;
+    containerBackground.style.backgroundImage = `url("../../images/games/slotmachine/background-stars.jpg")`;
+  }
+
+  function animateBackgroundLettersOn(symbolOffset) {
+    // Use the symbolOffset of the last reel so that the background animation ends when all the reels stop spinning.
+    const duration = symbolOffset * timePerSymbol;
+    containerBackground.style.transition = `background-image ${duration}ms`;
+    containerBackground.style.backgroundImage = `url("../../images/games/slotmachine/background-letters.jpg")`;
   }
 
   function animateReel(reel, symbolOffset, targetBackgroundPositionY) {
@@ -174,6 +197,7 @@
     isRolling = true;
 
     try {
+      // Store the symbolOffsets to also animate the background and update the indexes
       const symbolOffsets = [];
 
       const animationPromises = reels.map((reel, i) => {
@@ -183,6 +207,14 @@
 
         return animateReel(reel, symbolOffset, targetBackgroundPositionY);
       });
+
+      if (guaranteedWinMode) {
+        animateBackgroundLettersOff(symbolOffsets[2]);
+      } else {
+        animateBackgroundLettersOn(symbolOffsets[2]);
+      }
+
+      hideProject();
 
       await Promise.all(animationPromises);
 
@@ -194,6 +226,9 @@
       if (indexes.every((index) => index === indexes[0])) {
         showProject();
       }
+
+      // Toggle guaranteedWinMode mode
+      toggleGuaranteedWinMode();
     } catch (err) {
       // reject message
     } finally {
@@ -248,18 +283,25 @@
     setLeverDown();
     // Roll the reels
     rollReels(reels, guaranteedWinMode);
-    // Toggle guaranteedWinMode mode
-    toggleGuaranteedWinMode();
   }
 
   function handleWindowResize() {
     if (isRolling) {
       cancelPendingAnimations();
       setLeverUp();
+
+      // If the next roll will win, then the background should be letters
+      if (guaranteedWinMode) {
+        containerBackground.style.backgroundImage = `url("../../images/games/slotmachine/background-letters.jpg")`;
+      } else {
+        containerBackground.style.backgroundImage = `url("../../images/games/slotmachine/background-stars.jpg")`;
+      }
     }
     // Update reel dimensions
     getReelDimensions(reels);
+
     // Update symbol positions based on current dimensions and indexes
+    // If it's rolling it will overwrite the ongoing css transition
     setSymbolPositions(reels, indexes);
   }
 
@@ -277,6 +319,8 @@
     setSymbolPositions(reels, indexes);
     // Create array to keep track of winning array
     createWinningSymbolIndexes();
+    // Hide the project text
+    projectText.style.opacity = 0;
   }
 
   window.addEventListener("resize", handleWindowResize);
