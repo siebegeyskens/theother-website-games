@@ -1,6 +1,58 @@
 (function () {
   let boxes, boxesWrapper, container, hammer, containerGhost;
-  let mouseOver = false;
+  let currentBox = 0;
+
+  function endGame() {
+    dropHammer();
+
+    // Remove all event listeners
+    containerGhost.removeEventListener("mouseenter", grabHammer);
+    containerGhost.removeEventListener("mouseleave", dropHammer);
+    containerGhost.removeEventListener("click", breakGlass);
+
+    // Show cursor again
+
+    container.classList.remove("game-emergencybox-hidden-cursor");
+  }
+
+  function showContacts() {
+    window.alert("Show contact information!");
+  }
+
+  function animateHammerDown() {
+    return new Promise((resolve, reject) => {
+      const duration = 20; //ms
+      hammer.style.transition = `transform ${duration}ms`;
+      hammer.style.transform = `scale(0.7) rotate(-10deg) translate(-50%, -50%)`;
+      setTimeout(() => {
+        resolve();
+      }, duration);
+    });
+  }
+
+  function animateHammerUp() {
+    return new Promise((resolve, reject) => {
+      const duration = 300; //ms
+      const delay = 100; // ms
+      hammer.style.transition = `transform ${duration}ms ${delay}ms`;
+      hammer.style.transform = `scale(1) rotate(0) translate(-50%, -50%)`;
+      setTimeout(() => {
+        resolve();
+      }, duration + delay);
+    });
+  }
+
+  async function breakGlass() {
+    await animateHammerDown();
+    boxes[currentBox + 1].classList.add("game-emergencybox-visible");
+    boxes[currentBox].classList.remove("game-emergencybox-visible");
+    await animateHammerUp();
+    currentBox++;
+    if (currentBox === boxes.length - 1) {
+      endGame();
+      setTimeout(showContacts, 500);
+    }
+  }
 
   function grabHammer() {
     container.addEventListener("mousemove", cursor);
@@ -27,8 +79,15 @@
     hammer = document.getElementById("game-emergencybox-hammer");
     containerGhost = document.getElementById("game-emergencybox-container-ghost");
 
-    containerGhost.addEventListener("mouseenter", grabHammer);
+    containerGhost.addEventListener("click", breakGlass);
 
-    containerGhost.addEventListener("mouseleave", dropHammer);
+    const canHover = window.matchMedia("(hover: hover)").matches;
+    if (canHover) {
+      containerGhost.addEventListener("mouseenter", grabHammer);
+      window.addEventListener("mousemove", (e) => {
+        if ((e.target = containerGhost)) grabHammer;
+      });
+      containerGhost.addEventListener("mouseleave", dropHammer);
+    }
   });
 })();
