@@ -3,17 +3,15 @@
 .game-slotmachine {
   background-image: url("../../images/games/slotmachine/background-letters.jpg"),
     url("../../images/games/slotmachine/background-stars.jpg");
-  background-size: cover;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  padding: 128px 0;
 }
 
 /* Slot machine (images) */
 
-.game-slotmachine-container {
+.game-slotmachine-wrapper {
   position: relative;
   width: 30%;
   max-width: 600px;
@@ -95,7 +93,7 @@
 
 /* Below 1200px (landscape tablets) */
 @media (max-width: 1200px) {
-  .game-slotmachine-container {
+  .game-slotmachine-wrapper {
     width: 500px;
   }
 
@@ -106,12 +104,8 @@
 
 /* Below 560px (mobile) */
 @media (max-width: 560px) {
-  .game-slotmachine-container {
+  .game-slotmachine-wrapper {
     width: 100%;
-  }
-
-  .game-slotmachine {
-    padding: 128px 32px;
   }
 
   .game-slotmachine-text-container {

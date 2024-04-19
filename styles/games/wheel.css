@@ -22,7 +22,7 @@
 
 /* wheel containers */
 
-.game-wheel-container-outer {
+.game-wheel-wrapper-outer {
   width: 66%;
   max-width: 1200px;
   position: absolute;
@@ -32,7 +32,7 @@
   top: 8%;
 }
 
-.game-wheel-container-inner {
+.game-wheel-wrapper-inner {
   position: relative;
 }
 
@@ -108,7 +108,7 @@
 
 /* Above 1920px (large desktops) */
 @media (min-width: 1921px) {
-  .game-wheel-container-outer {
+  .game-wheel-wrapper-outer {
     top: auto;
     bottom: 45.5%;
   }
@@ -116,14 +116,14 @@
 
 /* Below 1200px (landscape tablets) */
 @media (max-width: 1200px) {
-  .game-wheel-container-outer {
+  .game-wheel-wrapper-outer {
     width: 75%;
   }
 }
 
 /* Below 560px (mobile) */
 @media (max-width: 560px) {
-  .game-wheel-container-outer {
+  .game-wheel-wrapper-outer {
     width: 85%;
     top: 20%;
   }

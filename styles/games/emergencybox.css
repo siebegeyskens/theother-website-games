@@ -1,0 +1,39 @@
+.game-emergencybox {
+  background-image: url("../../images/games/emergencybox/background.jpg");
+  background-size: cover;
+  display: flex;
+  justify-content: center;
+  position: relative;
+  cursor: none;
+  overflow: hidden;
+}
+
+.game-emergencybox-container-ghost {
+  position: absolute;
+  width: 100%;
+  /* background-color: rgba(255, 0, 0, 0.388); */
+  top: 0;
+  bottom: 0;
+  z-index: 100000;
+}
+
+.game-emergencybox-hammer {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  z-index: 10000;
+}
+
+.game-emergencybox-hammer.game-emergencybox-hidden {
+  display: none;
+}
+
+.game-emergencybox-box {
+  /* max-width: 500px; */
+  max-width: 100%;
+  height: auto;
+  display: none;
+}
+
+.game-emergencybox-box.visible {
+  display: block;
+}

@@ -7,12 +7,16 @@
     <link rel="stylesheet" href="./styles/layout.css" />
     <link rel="stylesheet" href="./styles/games/wheel.css" />
     <link rel="stylesheet" href="./styles/games/slotmachine.css" />
+    <link rel="stylesheet" href="./styles/games/emergencybox.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap"
       rel="stylesheet"
     />
+    <script src="./js/games/wheel.js"></script>
+    <script src="./js/games/slotmachine.js"></script>
+    <script src="./js/games/emergencybox.js"></script>
   </head>
   <body>
     <section class="game-wheel">
@@ -25,8 +29,8 @@
           class="game-wheel-background"
         />
       </picture>
-      <div class="game-wheel-container-outer">
-        <div class="game-wheel-container-inner">
+      <div class="game-wheel-wrapper-outer">
+        <div class="game-wheel-wrapper-inner">
           <picture>
             <source srcset="./images/games/wheel/wheel.webp" type="image/webp" />
             <source srcset="./images/games/wheel/wheel-min.png" type="image/png" />
@@ -72,8 +76,8 @@
         />
       </picture>
     </section>
-    <section class="game-slotmachine" id="game-slotmachine">
-      <div class="game-slotmachine-container">
+    <section class="game-slotmachine container" id="game-slotmachine">
+      <div class="game-slotmachine-wrapper">
         <picture>
           <source
             srcset="
@@ -90,6 +94,7 @@
             type="image/png"
           />
           <img
+            loading="lazy"
             id="game-slotmachine-btn"
             class="game-slotmachine-img game-slotmachine-btn"
             src="./images/games/slotmachine/lever-up.png"
@@ -112,6 +117,7 @@
             type="image/png"
           />
           <img
+            loading="lazy"
             class="game-slotmachine-img game-slotmachine-iron"
             src="./images/games/slotmachine/slot-machine-iron.png"
             alt="Blinking button on top of the lever"
@@ -134,6 +140,7 @@
             type="image/png"
           />
           <img
+            loading="lazy"
             id="game-slotmachine-lever"
             class="game-slotmachine-img game-slotmachine-lever"
             src="./images/games/slotmachine/lever-up.png"
@@ -156,6 +163,7 @@
             type="image/png"
           />
           <img
+            loading="lazy"
             id="game-slotmachine-lever-down"
             class="game-slotmachine-img game-slotmachine-invisible"
             src="./images/games/slotmachine/lever-down.png"
@@ -183,6 +191,7 @@
             type="image/png"
           />
           <img
+            loading="lazy"
             class="game-slotmachine-img game-slotmachine-img--relative"
             src="./images/games/slotmachine/slot-machine.png"
             alt="Main part of a slot machine including the reels"
@@ -193,7 +202,131 @@
         <p id="game-slotmachine-text">...</p>
       </div>
     </section>
-    <script src="./js/games/wheel.js"></script>
-    <script src="./js/games/slotmachine.js"></script>
+    <section id="game-emergencybox-container" class="game-emergencybox container">
+      <picture>
+        <source
+          srcset="
+            ./images/games/emergencybox/hammer.webp,
+            ./images/games/emergencybox/hammer_2x.webp 2x
+          "
+          type="image/webp"
+        />
+        <source
+          srcset="
+            ./images/games/emergencybox/hammer.png,
+            ./images/games/emergencybox/hammer_2x.png 2x
+          "
+          type="image/png"
+        />
+        <img
+          loading="lazy"
+          width="130"
+          height="591"
+          src="./images/games/emergencybox/hammer.png"
+          alt="A glass emergencybox with the head statue of David calling on a retro phone."
+          class="game-emergencybox-hammer game-emergencybox-hidden"
+          id="game-emergencybox-hammer"
+        />
+      </picture>
+      <div class="game-emergencybox-container-ghost" id="game-emergencybox-container-ghost"></div>
+      <div id="game-emergencybox-wrapper">
+        <picture>
+          <source
+            srcset="
+              ./images/games/emergencybox/box-1.webp,
+              ./images/games/emergencybox/box-1_2x.webp 2x
+            "
+            type="image/webp"
+          />
+          <source
+            srcset="
+              ./images/games/emergencybox/box-1.png,
+              ./images/games/emergencybox/box-1_2x.png 2x
+            "
+            type="image/png"
+          />
+          <img
+            loading="lazy"
+            width="500"
+            height="628"
+            src="./images/games/emergencybox/box-1.png"
+            alt="A glass emergencybox with the head statue of David calling on a retro phone."
+            class="game-emergencybox-box visible"
+          />
+        </picture>
+        <picture>
+          <source
+            srcset="
+              ./images/games/emergencybox/box-2.webp,
+              ./images/games/emergencybox/box-2_2x.webp 2x
+            "
+            type="image/webp"
+          />
+          <source
+            srcset="
+              ./images/games/emergencybox/box-2.png,
+              ./images/games/emergencybox/box-2_2x.png 2x
+            "
+            type="image/png"
+          />
+          <img
+            loading="lazy"
+            width="500"
+            height="628"
+            src="./images/games/emergencybox/box-2.png"
+            alt="A glass emergencybox with the head statue of David calling on a retro phone."
+            class="game-emergencybox-box"
+          />
+        </picture>
+        <picture>
+          <source
+            srcset="
+              ./images/games/emergencybox/box-3.webp,
+              ./images/games/emergencybox/box-3_2x.webp 2x
+            "
+            type="image/webp"
+          />
+          <source
+            srcset="
+              ./images/games/emergencybox/box-3.png,
+              ./images/games/emergencybox/box-3_2x.png 2x
+            "
+            type="image/png"
+          />
+          <img
+            loading="lazy"
+            width="500"
+            height="628"
+            src="./images/games/emergencybox/box-3.png"
+            alt="A glass emergencybox with the head statue of David calling on a retro phone."
+            class="game-emergencybox-box"
+          />
+        </picture>
+        <picture>
+          <source
+            srcset="
+              ./images/games/emergencybox/box-4.webp,
+              ./images/games/emergencybox/box-4_2x.webp 2x
+            "
+            type="image/webp"
+          />
+          <source
+            srcset="
+              ./images/games/emergencybox/box-4.png,
+              ./images/games/emergencybox/box-4_2x.png 2x
+            "
+            type="image/png"
+          />
+          <img
+            loading="lazy"
+            width="500"
+            height="628"
+            src="./images/games/emergencybox/box-4.png"
+            alt="A glass emergencybox with the head statue of David calling on a retro phone."
+            class="game-emergencybox-box"
+          />
+        </picture>
+      </div>
+    </section>
   </body>
 </html>

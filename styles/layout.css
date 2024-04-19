@@ -3,3 +3,18 @@
   padding: 0;
   box-sizing: border-box;
 }
+
+body {
+  position: relative;
+}
+
+.container {
+  padding: 128px 0;
+}
+
+/* Below 560px (mobile) */
+@media (max-width: 560px) {
+  .container {
+    padding: 128px 32px;
+  }
+}

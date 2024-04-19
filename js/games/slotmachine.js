@@ -78,12 +78,7 @@
   let resizedDuringRoll = false;
   let animationRejects = []; // To keep track of the reject methods of the promises for reel animations
 
-  const reels = Array.from(document.getElementsByClassName("game-slotmachine-reel"));
-  const btn = document.getElementById("game-slotmachine-btn");
-  const lever = document.getElementById("game-slotmachine-lever");
-  const leverDown = document.getElementById("game-slotmachine-lever-down");
-  const projectText = document.getElementById("game-slotmachine-text");
-  const containerBackground = document.getElementById("game-slotmachine");
+  let reels, btn, lever, leverDown, projectText, containerBackground;
 
   // https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
   function shuffle(array) {
@@ -324,8 +319,15 @@
   }
 
   window.addEventListener("resize", handleWindowResize);
-  window.onload = () => {
+  window.addEventListener("load", () => {
+    reels = Array.from(document.getElementsByClassName("game-slotmachine-reel"));
+    btn = document.getElementById("game-slotmachine-btn");
+    lever = document.getElementById("game-slotmachine-lever");
+    leverDown = document.getElementById("game-slotmachine-lever-down");
+    projectText = document.getElementById("game-slotmachine-text");
+    containerBackground = document.getElementById("game-slotmachine");
+
     initializeSlotMachine();
     btn.addEventListener("click", handleButtonClick);
-  };
+  });
 })();

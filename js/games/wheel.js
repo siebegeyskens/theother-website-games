@@ -35,9 +35,7 @@
     20: "SMART marketing",
   };
 
-  const wheel = document.getElementById("game-wheel-wheel");
-  const button = document.getElementById("game-wheel-button");
-  const marker = document.getElementById("game-wheel-marker");
+  let wheel, button, marker;
 
   // Calculate how long the wheels spins based on how far it spins
   function calculateSpinningTime(degrees) {
@@ -86,10 +84,16 @@
     alert(winningService);
   }
 
-  button.addEventListener("click", spinWheel);
+  window.addEventListener("load", () => {
+    wheel = document.getElementById("game-wheel-wheel");
+    button = document.getElementById("game-wheel-button");
+    marker = document.getElementById("game-wheel-marker");
 
-  wheel.addEventListener("transitionend", () => {
-    resetWheel(degrees);
-    handleWin(degrees);
+    button.addEventListener("click", spinWheel);
+
+    wheel.addEventListener("transitionend", () => {
+      resetWheel(degrees);
+      handleWin(degrees);
+    });
   });
 })();
