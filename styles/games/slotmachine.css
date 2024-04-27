@@ -1,12 +1,25 @@
 /* main container */
 
 .game-slotmachine {
-  background-image: url("../../images/games/slotmachine/background-letters.jpg"),
-    url("../../images/games/slotmachine/background-stars.jpg");
+  /* background-image: url("../../images/games/slotmachine/background-letters.jpg"),
+    url("../../images/games/slotmachine/background-stars.jpg"); */
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  position: relative;
+}
+
+.game-slotmachine-canvas {
+  background: black;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  /* font-smooth: never;
+  -webkit-font-smoothing: none; */
 }
 
 /* Slot machine (images) */
@@ -81,6 +94,11 @@
 /* Project information */
 
 .game-slotmachine-text-container {
+  text-align: center;
+  z-index: 100;
+}
+
+.game-slotmachine-text {
   color: #52ba2b;
   font-family: "Pixelify Sans", sans-serif;
   font-optical-sizing: auto;
@@ -88,7 +106,6 @@
   font-style: normal;
   font-size: 52px;
   text-transform: uppercase;
-  text-align: center;
 }
 
 /* Below 1200px (landscape tablets) */
@@ -97,7 +114,7 @@
     width: 500px;
   }
 
-  .game-slotmachine-text-container {
+  .game-slotmachine-text {
     font-size: 40px;
   }
 }
@@ -108,7 +125,7 @@
     width: 100%;
   }
 
-  .game-slotmachine-text-container {
+  .game-slotmachine-text {
     font-size: 28px;
   }
 }

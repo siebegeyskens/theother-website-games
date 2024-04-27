@@ -78,7 +78,85 @@
   let resizedDuringRoll = false;
   let animationRejects = []; // To keep track of the reject methods of the promises for reel animations
 
-  let reels, btn, lever, leverDown, projectText, containerBackground;
+  let reels, btn, lever, leverDown, projectText, containerBackground, canvas, ctx, background;
+
+  // BACKGROUND
+
+  // Symbol class' job is to create and draw individual symbols that make up the background effect.
+  // Creates and manages individual symbols.
+  class Symbol {
+    constructor(x, y, fontSize) {
+      this.characters = `!"#$%&\'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]^_{|}~`;
+      this.x = x;
+      this.y = y;
+      this.index = Math.floor(Math.random() * this.characters.length);
+      this.fontSize = fontSize;
+      this.text = this.characters.charAt(this.index); // currently active symbol
+      this.intervalID = null;
+    }
+    clear(context) {
+      context.fillStyle = "black";
+      context.fillRect(this.x, this.y - 5, this.fontSize, this.fontSize + 5);
+    }
+    draw(context) {
+      this.clear(context);
+      this.text = this.characters.charAt(this.index);
+      context.font = this.fontSize + `px monospace`;
+      context.fillStyle = "#52ba2b" + Math.floor(Math.random() * 100);
+      context.textBaseline = "top";
+      context.fillText(this.text, this.x, this.y);
+      if (this.index > this.characters.length - 1) {
+        this.index = 0;
+      } else {
+        this.index++;
+      }
+    }
+  }
+
+  // Main wrapper for the whole background effect that holds all functionality to create, update and draw all symbols.
+  // Manages the entire background effect, all of the symbols at once.
+  class Background {
+    constructor(canvasWidth, canvasHeight, fontSize) {
+      this.canvasWidth = canvasWidth;
+      this.canvasHeight = canvasHeight;
+      this.fontSize = fontSize;
+      this.colums = this.canvasWidth / this.fontSize;
+      this.rows = this.canvasHeight / this.fontSize;
+      this.symbols = [];
+      this.#initialize();
+      this.startAnimation();
+    }
+    // The hashtag makes it a private function so it can't be called from the outside, they have resitricted acces.
+    #initialize() {
+      // create all symbols
+      for (let i = 0; i < this.colums; i++) {
+        for (let j = 0; j < this.rows; j++) {
+          this.symbols.push(new Symbol(i * this.fontSize, j * this.fontSize, this.fontSize));
+        }
+      }
+    }
+
+    startAnimation() {
+      shuffle(this.symbols);
+      this.symbols.forEach((symbol, i) => {
+        setTimeout(() => {
+          clearInterval(symbol.intervalID);
+          symbol.intervalID = setInterval(() => {
+            symbol.draw(ctx);
+          }, 500);
+        }, i * 5);
+      });
+    }
+
+    stopAnimation() {
+      this.symbols.forEach((symbol, i) => {
+        setTimeout(() => {
+          clearInterval(symbol.intervalID);
+          symbol.clear(ctx);
+        }, 5 * i);
+      });
+    }
+  }
 
   // https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
   function shuffle(array) {
@@ -203,13 +281,14 @@
         return animateReel(reel, symbolOffset, targetBackgroundPositionY);
       });
 
-      if (guaranteedWinMode) {
-        animateBackgroundLettersOff(symbolOffsets[2]);
-      } else {
-        animateBackgroundLettersOn(symbolOffsets[2]);
-      }
-
       hideProject();
+
+      if (guaranteedWinMode) {
+        await animationPromises[1];
+        background.stopAnimation();
+      } else if (background.symbols[0].intervalID) {
+        background.startAnimation();
+      }
 
       await Promise.all(animationPromises);
 
@@ -335,6 +414,15 @@
     leverDown = document.getElementById("game-slotmachine-lever-down");
     projectText = document.getElementById("game-slotmachine-text");
     containerBackground = document.getElementById("game-slotmachine");
+    canvas = document.getElementById("canvas");
+    ctx = canvas.getContext("2d");
+    canvas.setAttribute("width", canvas.offsetWidth);
+    canvas.setAttribute("height", canvas.offsetHeight);
+    background = new Background(
+      canvas.offsetWidth,
+      canvas.offsetHeight,
+      parseInt(getComputedStyle(projectText).fontSize.replace("px", ""))
+    );
 
     initializeSlotMachine();
     btn.addEventListener("click", handleButtonClick);
