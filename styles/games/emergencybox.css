@@ -26,22 +26,6 @@
   z-index: 10000;
 }
 
-.game-emergencybox-hammer {
-  /* animation: 1.5s ease-out infinite Blink; */
-}
-
-@keyframes Blink {
-  0% {
-    /* opacity: 1; */
-    transform: scale(1);
-  }
-
-  100% {
-    /* opacity: 1; */
-    transform: scale(0.7);
-  }
-}
-
 .game-emergencybox-hammer.game-emergencybox-hidden {
   display: none;
 }

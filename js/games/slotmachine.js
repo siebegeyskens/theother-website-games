@@ -263,10 +263,18 @@
     });
   }
 
-  function setBackgroundImagesSource() {
-    reels.forEach((reel) => {
-      reel.style.backgroundImage = `url(${symbolsImageSource})`;
+  function loadSymbolSourceImages() {
+    const symbolImagesLoadPromises = reels.map((reel) => {
+      return new Promise((resolve, reject) => {
+        let img = new Image();
+        img.onload = function () {
+          reel.style.backgroundImage = `url(${img.src})`;
+          resolve();
+        };
+        img.src = symbolsImageSource;
+      });
     });
+    return symbolImagesLoadPromises;
   }
 
   function handleButtonClick() {
@@ -305,11 +313,12 @@
     let randomIndex = Math.floor(Math.random() * numSymbols);
     indexes = reels.map((_, i) => (randomIndex + i) % numSymbols);
   }
-  function initializeSlotMachine() {
-    setBackgroundImagesSource();
+
+  async function initializeSlotMachine() {
+    await Promise.all(loadSymbolSourceImages());
+    // loadSymbolSourceImages();
     // Update variables based on reel properties
     getReelDimensions(reels);
-    // setStartOffset(reels);
     initIndexes();
     setSymbolPositions(reels, indexes);
     // Create array to keep track of winning array
