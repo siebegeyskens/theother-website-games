@@ -123,6 +123,8 @@
       this.colums = this.canvasWidth / this.fontSize;
       this.rows = this.canvasHeight / this.fontSize;
       this.symbols = [];
+      this.intervals = [];
+      this.isAnimating = false;
       this.#initialize();
       this.startAnimation();
     }
@@ -137,23 +139,35 @@
     }
 
     startAnimation() {
+      this.isAnimating = true;
       shuffle(this.symbols);
-      this.symbols.forEach((symbol, i) => {
-        setTimeout(() => {
-          clearInterval(symbol.intervalID);
-          symbol.intervalID = setInterval(() => {
+      const firstChunk = this.symbols.slice(0, this.symbols.length / 2);
+      const secondChunk = this.symbols.slice(this.symbols.length / 2, this.symbols.length);
+      this.intervals.push(
+        setInterval(() => {
+          firstChunk.forEach((symbol) => {
             symbol.draw(ctx);
-          }, 500);
-        }, i * 5);
-      });
+          });
+        }, 500)
+      );
+      setTimeout(() => {
+        this.intervals.push(
+          setInterval(() => {
+            secondChunk.forEach((symbol) => {
+              symbol.draw(ctx);
+            });
+          }, 500)
+        );
+      }, 250);
     }
 
     stopAnimation() {
+      this.isAnimating = false;
+      this.intervals.forEach((interval) => clearInterval(interval));
       this.symbols.forEach((symbol, i) => {
         setTimeout(() => {
-          clearInterval(symbol.intervalID);
           symbol.clear(ctx);
-        }, 5 * i);
+        }, i * 2);
       });
     }
   }
@@ -286,7 +300,7 @@
       if (guaranteedWinMode) {
         await animationPromises[1];
         background.stopAnimation();
-      } else if (background.symbols[0].intervalID) {
+      } else if (!background.isAnimating) {
         background.startAnimation();
       }
 
