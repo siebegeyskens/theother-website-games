@@ -105,7 +105,7 @@
       this.clear(context);
       this.text = this.characters.charAt(this.index);
       const rand = Math.random();
-      const lightness = 45 + Math.floor(rand * 25);
+      const lightness = 45 + Math.floor(rand * 30);
       const alpha = Math.floor(rand * 100);
       const blur = Math.floor(rand * 25);
 
@@ -136,8 +136,8 @@
       this.canvasWidth = canvasWidth;
       this.canvasHeight = canvasHeight;
       this.fontSize = fontSize;
-      this.colums = this.canvasWidth / (this.fontSize - 3);
-      this.rows = this.canvasHeight / (this.fontSize - 2);
+      this.colums = this.canvasWidth / this.fontSize;
+      this.rows = this.canvasHeight / this.fontSize;
       this.symbols = [];
       this.intervals = [];
       this.timout;
@@ -150,9 +150,7 @@
       // create all symbols
       for (let i = 0; i < this.colums; i++) {
         for (let j = 0; j < this.rows; j++) {
-          this.symbols.push(
-            new Symbol(i * (this.fontSize - 3), j * (this.fontSize - 2), this.fontSize)
-          );
+          this.symbols.push(new Symbol(i * this.fontSize, j * this.fontSize, this.fontSize));
         }
       }
     }
