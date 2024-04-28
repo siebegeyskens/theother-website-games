@@ -94,14 +94,17 @@
       this.text = this.characters.charAt(this.index); // currently active symbol
       this.intervalID = null;
     }
+    // Clear the letter with the "destination-out" composite operation (clears with transparancy)
     clear(context) {
-      context.fillStyle = "black";
+      context.globalCompositeOperation = "destination-out";
+      context.fillStyle = "rgba(0, 0, 0, 1)";
       context.fillRect(this.x, this.y - 5, this.fontSize, this.fontSize + 5);
+      context.globalCompositeOperation = "source-over";
     }
     draw(context) {
       this.clear(context);
       this.text = this.characters.charAt(this.index);
-      context.font = this.fontSize + `px monospace`;
+      context.font = this.fontSize + `px Pixelify Sans`;
       context.fillStyle = "#52ba2b" + Math.floor(Math.random() * 100);
       context.textBaseline = "top";
       context.fillText(this.text, this.x, this.y);
@@ -407,6 +410,18 @@
     indexes = reels.map((_, i) => (randomIndex + i) % numSymbols);
   }
 
+  function initializeBackground() {
+    canvas = document.getElementById("canvas");
+    ctx = canvas.getContext("2d");
+    canvas.setAttribute("width", canvas.offsetWidth);
+    canvas.setAttribute("height", canvas.offsetHeight);
+    background = new Background(
+      canvas.offsetWidth,
+      canvas.offsetHeight,
+      parseInt(getComputedStyle(projectText).fontSize.replace("px", ""))
+    );
+  }
+
   async function initializeSlotMachine() {
     await Promise.all(loadSymbolSourceImages());
     // loadSymbolSourceImages();
@@ -418,6 +433,14 @@
     createWinningSymbolIndexes();
     // Hide the project text
     projectText.style.opacity = 0;
+
+    //
+    // BACKGROUND
+    //
+
+    // Wait for the pixelify font to load before starting the canvas
+    let ready = await document.fonts.ready;
+    initializeBackground();
   }
 
   window.addEventListener("resize", handleWindowResize);
@@ -428,15 +451,6 @@
     leverDown = document.getElementById("game-slotmachine-lever-down");
     projectText = document.getElementById("game-slotmachine-text");
     containerBackground = document.getElementById("game-slotmachine");
-    canvas = document.getElementById("canvas");
-    ctx = canvas.getContext("2d");
-    canvas.setAttribute("width", canvas.offsetWidth);
-    canvas.setAttribute("height", canvas.offsetHeight);
-    background = new Background(
-      canvas.offsetWidth,
-      canvas.offsetHeight,
-      parseInt(getComputedStyle(projectText).fontSize.replace("px", ""))
-    );
 
     initializeSlotMachine();
     btn.addEventListener("click", handleButtonClick);
