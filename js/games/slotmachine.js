@@ -391,17 +391,16 @@
   }
 
   function loadSymbolSourceImages() {
-    const symbolImagesLoadPromises = reels.map((reel) => {
+    return reels.map((reel) => {
       return new Promise((resolve, reject) => {
         let img = new Image();
         img.onload = function () {
-          reel.style.backgroundImage = `url(${img.src})`;
+          reel.style.backgroundImage = `url(${symbolsImageSource})`;
           resolve();
         };
         img.src = symbolsImageSource;
       });
     });
-    return symbolImagesLoadPromises;
   }
 
   function handleButtonClick() {
@@ -411,7 +410,6 @@
       winningSymbolIndex = 0;
     }
     setLeverDown();
-    // Roll the reels
     rollReels(reels, guaranteedWinMode);
     // Animate background
     background.startAnimation();
@@ -468,9 +466,10 @@
 
   async function initializeSlotMachine() {
     await Promise.all(loadSymbolSourceImages());
-    // loadSymbolSourceImages();
+
     // Update variables based on reel properties
     getReelDimensions(reels);
+    console.log(reelHeight);
     initIndexes();
     setSymbolPositions(reels, indexes);
     // Create array to keep track of winning array
