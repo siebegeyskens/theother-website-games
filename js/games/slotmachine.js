@@ -104,10 +104,23 @@
     draw(context) {
       this.clear(context);
       this.text = this.characters.charAt(this.index);
+      const rand = Math.random();
+      const lightness = 45 + Math.floor(rand * 25);
+      const alpha = Math.floor(rand * 100);
+      const blur = Math.floor(rand * 25);
+
       context.font = this.fontSize + `px Pixelify Sans`;
-      context.fillStyle = "#52ba2b" + Math.floor(Math.random() * 100);
       context.textBaseline = "top";
+      ctx.shadowColor = "#52ba2b";
+      ctx.shadowOffsetX = 0;
+      ctx.shadowOffsetY = 0;
+      ctx.shadowBlur = blur;
+
+      //       Hex	#52ba2b
+      // Hsl	hsl(104, 62%, 45%)
+      context.fillStyle = `hsl(104, 62%, ${lightness}% , ${alpha}%)`;
       context.fillText(this.text, this.x, this.y);
+
       if (this.index > this.characters.length - 1) {
         this.index = 0;
       } else {
@@ -123,10 +136,11 @@
       this.canvasWidth = canvasWidth;
       this.canvasHeight = canvasHeight;
       this.fontSize = fontSize;
-      this.colums = this.canvasWidth / this.fontSize;
-      this.rows = this.canvasHeight / this.fontSize;
+      this.colums = this.canvasWidth / (this.fontSize - 3);
+      this.rows = this.canvasHeight / (this.fontSize - 2);
       this.symbols = [];
       this.intervals = [];
+      this.timout;
       this.isAnimating = false;
       this.#initialize();
       this.startAnimation();
@@ -136,12 +150,15 @@
       // create all symbols
       for (let i = 0; i < this.colums; i++) {
         for (let j = 0; j < this.rows; j++) {
-          this.symbols.push(new Symbol(i * this.fontSize, j * this.fontSize, this.fontSize));
+          this.symbols.push(
+            new Symbol(i * (this.fontSize - 3), j * (this.fontSize - 2), this.fontSize)
+          );
         }
       }
     }
 
     startAnimation() {
+      this.intervals.forEach((interval) => clearInterval(interval));
       this.isAnimating = true;
       shuffle(this.symbols);
       const firstChunk = this.symbols.slice(0, this.symbols.length / 2);
@@ -153,7 +170,7 @@
           });
         }, 500)
       );
-      setTimeout(() => {
+      this.timout = setTimeout(() => {
         this.intervals.push(
           setInterval(() => {
             secondChunk.forEach((symbol) => {
@@ -172,6 +189,20 @@
           symbol.clear(ctx);
         }, i * 2);
       });
+    }
+
+    resize(width, height, fontSize) {
+      clearTimeout(this.timout);
+      this.intervals.forEach((interval) => clearInterval(interval));
+
+      this.canvasWidth = width;
+      this.canvasHeight = height;
+      this.fontSize = fontSize;
+      this.colums = this.canvasWidth / (this.fontSize - 3);
+      this.rows = this.canvasHeight / (this.fontSize - 2);
+      this.symbols = [];
+      this.intervals = [];
+      this.#initialize();
     }
   }
 
@@ -382,26 +413,39 @@
     setLeverDown();
     // Roll the reels
     rollReels(reels, guaranteedWinMode);
+    // Animate background
+    background.startAnimation();
   }
 
   function handleWindowResize() {
-    if (isRolling) {
-      cancelPendingAnimations();
-      setLeverUp();
-
-      // If the next roll will win, then the background should be letters
-      if (guaranteedWinMode) {
-        containerBackground.style.backgroundImage = `url("../../images/games/slotmachine/background-letters.jpg")`;
-      } else {
-        containerBackground.style.backgroundImage = `url("../../images/games/slotmachine/background-stars.jpg")`;
-      }
-    }
     // Update reel dimensions
     getReelDimensions(reels);
 
     // Update symbol positions based on current dimensions and indexes
     // If it's rolling it will overwrite the ongoing css transition
     setSymbolPositions(reels, indexes);
+
+    // Update canvas coordinate sizing
+    canvas.setAttribute("width", canvas.offsetWidth);
+    canvas.setAttribute("height", canvas.offsetHeight);
+    // resize background
+    background.resize(
+      canvas.offsetWidth,
+      canvas.offsetHeight,
+      parseInt(getComputedStyle(projectText).fontSize.replace("px", ""))
+    );
+
+    if (isRolling) {
+      cancelPendingAnimations();
+      setLeverUp();
+    }
+
+    const won = indexes.every((index) => index === indexes[0]);
+    if (won) {
+      showProject();
+    } else {
+      background.startAnimation();
+    }
   }
 
   // set the starting index to a randomly, but not winning
