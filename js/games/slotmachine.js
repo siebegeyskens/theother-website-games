@@ -92,13 +92,12 @@
       this.index = Math.floor(Math.random() * this.characters.length);
       this.fontSize = fontSize;
       this.text = this.characters.charAt(this.index); // currently active symbol
-      this.intervalID = null;
     }
     // Clear the letter with the "destination-out" composite operation (clears with transparancy)
     clear(context) {
       context.globalCompositeOperation = "destination-out";
       context.fillStyle = "rgba(0, 0, 0, 1)";
-      context.fillRect(this.x, this.y - 5, this.fontSize, this.fontSize + 5);
+      context.fillRect(this.x, this.y, this.fontSize, this.fontSize);
       context.globalCompositeOperation = "source-over";
     }
     draw(context) {
@@ -111,10 +110,10 @@
 
       context.font = this.fontSize + `px Pixelify Sans`;
       context.textBaseline = "top";
-      ctx.shadowColor = "#52ba2b";
-      ctx.shadowOffsetX = 0;
-      ctx.shadowOffsetY = 0;
-      ctx.shadowBlur = blur;
+      context.shadowColor = "#52ba2b";
+      context.shadowOffsetX = 0;
+      context.shadowOffsetY = 0;
+      context.shadowBlur = blur;
 
       //       Hex	#52ba2b
       // Hsl	hsl(104, 62%, 45%)
@@ -139,9 +138,14 @@
       this.colums = this.canvasWidth / this.fontSize;
       this.rows = this.canvasHeight / this.fontSize;
       this.symbols = [];
-      this.intervals = [];
-      this.timout;
+      this.deltaTime = 0;
+      this.previousTimeStamp = 0;
+      this.nextDraw = 200; // Amount of ms to wait before redrawing
+      this.timer = 0;
       this.isAnimating = false;
+      this.firstChunk;
+      this.secondChunk;
+      this.firstChunkDrawn = false;
       this.#initialize();
       this.startAnimation();
     }
@@ -155,33 +159,48 @@
       }
     }
 
+    drawInChunks() {
+      if (!this.firstChunkDrawn) {
+        this.firstChunk.forEach((symbol) => symbol.draw(ctx));
+      } else {
+        this.secondChunk.forEach((symbol) => symbol.draw(ctx));
+      }
+      this.firstChunkDrawn = !this.firstChunkDrawn;
+    }
+
+    animate(timeStamp) {
+      // Calculate delta time
+      this.deltaTime = timeStamp - this.previousTimeStamp;
+      this.previousTimeStamp = timeStamp;
+
+      if (this.timer > this.nextDraw) {
+        this.drawInChunks();
+        this.timer = 0;
+      } else {
+        this.timer += this.deltaTime;
+      }
+
+      if (this.isAnimating) {
+        requestAnimationFrame((timeStamp) => {
+          this.animate(timeStamp);
+        });
+      }
+    }
+
     startAnimation() {
-      this.intervals.forEach((interval) => clearInterval(interval));
       this.isAnimating = true;
       shuffle(this.symbols);
-      const firstChunk = this.symbols.slice(0, this.symbols.length / 2);
-      const secondChunk = this.symbols.slice(this.symbols.length / 2, this.symbols.length);
-      this.intervals.push(
-        setInterval(() => {
-          firstChunk.forEach((symbol) => {
-            symbol.draw(ctx);
-          });
-        }, 500)
-      );
-      this.timout = setTimeout(() => {
-        this.intervals.push(
-          setInterval(() => {
-            secondChunk.forEach((symbol) => {
-              symbol.draw(ctx);
-            });
-          }, 500)
-        );
-      }, 250);
+      this.firstChunk = this.symbols.slice(0, this.symbols.length / 2);
+      this.secondChunk = this.symbols.slice(this.symbols.length / 2, this.symbols.length);
+      requestAnimationFrame((timeStamp) => {
+        this.animate(timeStamp);
+      });
     }
 
     stopAnimation() {
       this.isAnimating = false;
-      this.intervals.forEach((interval) => clearInterval(interval));
+
+      // Clear the symbols one by one with a timout in between
       this.symbols.forEach((symbol, i) => {
         setTimeout(() => {
           symbol.clear(ctx);
@@ -190,9 +209,6 @@
     }
 
     resize(width, height, fontSize) {
-      clearTimeout(this.timout);
-      this.intervals.forEach((interval) => clearInterval(interval));
-
       this.canvasWidth = width;
       this.canvasHeight = height;
       this.fontSize = fontSize;
@@ -284,20 +300,6 @@
     projectText.style.opacity = 0;
   }
 
-  function animateBackgroundLettersOff(symbolOffset) {
-    // Use the symbolOffset of the last reel so that the background animation ends when all the reels stop spinning.
-    const duration = symbolOffset * timePerSymbol;
-    containerBackground.style.transition = `background-image ${duration}ms`;
-    containerBackground.style.backgroundImage = `url("../../images/games/slotmachine/background-stars.jpg")`;
-  }
-
-  function animateBackgroundLettersOn(symbolOffset) {
-    // Use the symbolOffset of the last reel so that the background animation ends when all the reels stop spinning.
-    const duration = symbolOffset * timePerSymbol;
-    containerBackground.style.transition = `background-image ${duration}ms`;
-    containerBackground.style.backgroundImage = `url("../../images/games/slotmachine/background-letters.jpg")`;
-  }
-
   function animateReel(reel, symbolOffset, targetBackgroundPositionY) {
     reel.style.transition = `background-position-y ${
       symbolOffset * timePerSymbol
@@ -333,6 +335,7 @@
         await animationPromises[1];
         background.stopAnimation();
       } else if (!background.isAnimating) {
+        console.log("start animation");
         background.startAnimation();
       }
 
@@ -409,8 +412,6 @@
     }
     setLeverDown();
     rollReels(reels, guaranteedWinMode);
-    // Animate background
-    background.startAnimation();
   }
 
   function handleWindowResize() {
@@ -439,6 +440,7 @@
     const won = indexes.every((index) => index === indexes[0]);
     if (won) {
       showProject();
+      background.isAnimating = false;
     } else {
       background.startAnimation();
     }
@@ -467,7 +469,6 @@
 
     // Update variables based on reel properties
     getReelDimensions(reels);
-    console.log(reelHeight);
     initIndexes();
     setSymbolPositions(reels, indexes);
     // Create array to keep track of winning array
