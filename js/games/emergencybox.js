@@ -9,6 +9,7 @@
 
     // Remove all event listeners
     containerGhost.removeEventListener("mouseenter", grabHammer);
+    containerGhost.removeEventListener("mousemove", grabHammer);
     containerGhost.removeEventListener("mouseleave", dropHammer);
     containerGhost.removeEventListener("click", breakGlass);
 
@@ -87,6 +88,7 @@
     hammer.style.left = x + "px";
   }
 
+  const canHover = window.matchMedia("(hover: hover)").matches;
   window.addEventListener("load", () => {
     boxes = Array.from(document.getElementsByClassName("game-emergencybox-box"));
     boxesWrapper = document.getElementById("game-emergencybox-wrapper");
@@ -96,12 +98,9 @@
 
     containerGhost.addEventListener("click", breakGlass);
 
-    const canHover = window.matchMedia("(hover: hover)").matches;
     if (canHover) {
       containerGhost.addEventListener("mouseenter", grabHammer);
-      window.addEventListener("mousemove", (e) => {
-        if ((e.target = containerGhost)) grabHammer;
-      });
+      containerGhost.addEventListener("mousemove", grabHammer);
       containerGhost.addEventListener("mouseleave", dropHammer);
     }
   });
