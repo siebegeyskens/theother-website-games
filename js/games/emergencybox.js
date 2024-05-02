@@ -5,20 +5,21 @@
   let rotation = 0; // deg
 
   function endGame() {
-    dropHammer();
-
     // Remove all event listeners
     containerGhost.removeEventListener("mouseenter", grabHammer);
     containerGhost.removeEventListener("mousemove", grabHammer);
     containerGhost.removeEventListener("mouseleave", dropHammer);
     containerGhost.removeEventListener("click", breakGlass);
 
+    dropHammer();
     // Show cursor again
     container.classList.remove("game-emergencybox-hidden-cursor");
   }
 
   function showContacts() {
-    window.alert("Show contact information!");
+    setTimeout(() => {
+      window.alert("Show contact information!");
+    }, 100);
   }
 
   function animateHammerDown() {
@@ -63,7 +64,7 @@
     await animateHammerDown();
     showNextBox();
     await animateHammerUp();
-    if (currentBox === boxes.length - 1) {
+    if (currentBox == boxes.length - 1) {
       endGame();
       showContacts();
     }
