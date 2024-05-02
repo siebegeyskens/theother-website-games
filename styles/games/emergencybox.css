@@ -23,6 +23,7 @@
 .game-emergencybox-hammer {
   position: absolute;
   transform: translate(-50%, -50%);
+  transform-origin: center bottom;
   z-index: 10000;
 }
 

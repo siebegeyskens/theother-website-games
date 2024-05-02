@@ -104,20 +104,18 @@
       this.clear(context);
       this.text = this.characters.charAt(this.index);
       const rand = Math.random();
-      const lightness = 45 + Math.floor(rand * 30);
-      const alpha = Math.floor(rand * 100);
-      const blur = Math.floor(rand * 25);
 
-      context.font = this.fontSize + `px Pixelify Sans`;
-      context.textBaseline = "top";
-      context.shadowColor = "#52ba2b";
-      context.shadowOffsetX = 0;
-      context.shadowOffsetY = 0;
-      context.shadowBlur = blur;
+      const lightness = 45 + Math.floor(rand * 40);
+      const alpha = Math.floor(rand * 100);
+      // if (rand > 0.8) {
+      //   context.shadowBlur = 25;
+      // } else {
+      //   context.shadowBlur = 0;
+      // }
+      context.fillStyle = `hsl(104, 62%, ${lightness}% , ${alpha}%)`;
 
       //       Hex	#52ba2b
       // Hsl	hsl(104, 62%, 45%)
-      context.fillStyle = `hsl(104, 62%, ${lightness}% , ${alpha}%)`;
       context.fillText(this.text, this.x, this.y);
 
       if (this.index > this.characters.length - 1) {
@@ -159,11 +157,21 @@
       }
     }
 
+    drawChunk(chunk) {
+      chunk.forEach((symbol, i) => {
+        // TODO:
+        // if (i % 2 == 0) {
+        //   symbol.draw(ctx);
+        // }
+        symbol.draw(ctx);
+      });
+    }
+
     drawInChunks() {
       if (!this.firstChunkDrawn) {
-        this.firstChunk.forEach((symbol) => symbol.draw(ctx));
+        this.drawChunk(this.firstChunk);
       } else {
-        this.secondChunk.forEach((symbol) => symbol.draw(ctx));
+        this.drawChunk(this.secondChunk);
       }
       this.firstChunkDrawn = !this.firstChunkDrawn;
     }
@@ -188,6 +196,12 @@
     }
 
     startAnimation() {
+      ctx.font = this.fontSize + `px Pixelify Sans`;
+      ctx.textBaseline = "top";
+      // ctx.shadowColor = "#52ba2b";
+      // ctx.shadowOffsetX = 0;
+      // ctx.shadowOffsetY = 0;
+
       this.isAnimating = true;
       shuffle(this.symbols);
       this.firstChunk = this.symbols.slice(0, this.symbols.length / 2);
@@ -212,8 +226,8 @@
       this.canvasWidth = width;
       this.canvasHeight = height;
       this.fontSize = fontSize;
-      this.colums = this.canvasWidth / (this.fontSize - 3);
-      this.rows = this.canvasHeight / (this.fontSize - 2);
+      this.colums = this.canvasWidth / this.fontSize;
+      this.rows = this.canvasHeight / this.fontSize;
       this.symbols = [];
       this.intervals = [];
       this.#initialize();

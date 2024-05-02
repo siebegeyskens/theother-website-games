@@ -1,6 +1,8 @@
 (function () {
   let boxes, boxesWrapper, container, hammer, containerGhost;
   let currentBox = 0;
+  let scale = 1;
+  let rotation = 0; // deg
 
   function endGame() {
     dropHammer();
@@ -20,37 +22,50 @@
   }
 
   function animateHammerDown() {
-    return new Promise((resolve, reject) => {
-      const duration = 20; //ms
-      hammer.style.transition = `transform ${duration}ms`;
-      hammer.style.transform = `scale(0.7) rotate(-10deg) translate(-50%, -50%)`;
-      setTimeout(() => {
-        resolve();
-      }, duration);
+    return new Promise((resolve) => {
+      function animate() {
+        scale = scale - 0.25;
+        rotation = rotation - 5;
+        hammer.style.transform = `scale(${scale}) rotate(${rotation}deg) translate(-50%, -50%)`;
+        if (scale > 0.5) {
+          requestAnimationFrame(animate);
+        } else {
+          resolve();
+        }
+      }
+      requestAnimationFrame(animate);
     });
   }
 
   function animateHammerUp() {
-    return new Promise((resolve, reject) => {
-      const duration = 300; //ms
-      const delay = 100; // ms
-      hammer.style.transition = `transform ${duration}ms ${delay}ms`;
-      hammer.style.transform = `scale(1) rotate(0) translate(-50%, -50%)`;
-      setTimeout(() => {
-        resolve();
-      }, duration + delay);
+    return new Promise((resolve) => {
+      function animate() {
+        scale = scale + 0.1;
+        rotation = rotation + 2;
+        hammer.style.transform = `scale(${scale}) rotate(${rotation}deg) translate(-50%, -50%)`;
+        if (scale < 1) {
+          requestAnimationFrame(animate);
+        } else {
+          resolve();
+        }
+      }
+      requestAnimationFrame(animate);
     });
+  }
+
+  function showNextBox() {
+    currentBox++;
+    boxes[currentBox - 1].classList.remove("game-emergencybox-visible");
+    boxes[currentBox].classList.add("game-emergencybox-visible");
   }
 
   async function breakGlass() {
     await animateHammerDown();
-    boxes[currentBox + 1].classList.add("game-emergencybox-visible");
-    boxes[currentBox].classList.remove("game-emergencybox-visible");
+    showNextBox();
     await animateHammerUp();
-    currentBox++;
     if (currentBox === boxes.length - 1) {
       endGame();
-      setTimeout(showContacts, 500);
+      showContacts();
     }
   }
 
