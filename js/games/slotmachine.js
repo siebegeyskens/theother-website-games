@@ -75,15 +75,11 @@
   let winningSymbolIndexes = []; // Array to keep track of the winning symbols
   let winningSymbolIndex = 0; // Current winning symbol
   let isRolling = false;
-  let resizedDuringRoll = false;
   let animationRejects = []; // To keep track of the reject methods of the promises for reel animations
+  let reels, btn, lever, leverDown, projectText;
+  let canvas, ctx, background;
 
-  let reels, btn, lever, leverDown, projectText, containerBackground, canvas, ctx, background;
-
-  // BACKGROUND
-
-  // Symbol class' job is to create and draw individual symbols that make up the background effect.
-  // Creates and manages individual symbols.
+  // Symbol class' job is to create, manage and draw individual symbols that make up the background effect.
   class Symbol {
     constructor(x, y, fontSize) {
       this.characters = `!"#$%&\'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]^_{|}~`;
@@ -102,20 +98,14 @@
     }
     draw(context) {
       this.clear(context);
+
       this.text = this.characters.charAt(this.index);
       const rand = Math.random();
-
       const lightness = 45 + Math.floor(rand * 40);
       const alpha = Math.floor(rand * 100);
-      // if (rand > 0.8) {
-      //   context.shadowBlur = 25;
-      // } else {
-      //   context.shadowBlur = 0;
-      // }
-      context.fillStyle = `hsl(104, 62%, ${lightness}% , ${alpha}%)`;
-
       //       Hex	#52ba2b
       // Hsl	hsl(104, 62%, 45%)
+      context.fillStyle = `hsl(104, 62%, ${lightness}% , ${alpha}%)`;
       context.fillText(this.text, this.x, this.y);
 
       if (this.index > this.characters.length - 1) {
@@ -126,7 +116,6 @@
     }
   }
 
-  // Main wrapper for the whole background effect that holds all functionality to create, update and draw all symbols.
   // Manages the entire background effect, all of the symbols at once.
   class Background {
     constructor(canvasWidth, canvasHeight, fontSize) {
@@ -181,6 +170,7 @@
       this.deltaTime = timeStamp - this.previousTimeStamp;
       this.previousTimeStamp = timeStamp;
 
+      // Draw the next chunk when the timer reaches the threshold
       if (this.timer > this.nextDraw) {
         this.drawInChunks();
         this.timer = 0;
@@ -198,9 +188,6 @@
     startAnimation() {
       ctx.font = this.fontSize + `px Pixelify Sans`;
       ctx.textBaseline = "top";
-      // ctx.shadowColor = "#52ba2b";
-      // ctx.shadowOffsetX = 0;
-      // ctx.shadowOffsetY = 0;
 
       this.isAnimating = true;
       shuffle(this.symbols);
@@ -214,7 +201,7 @@
     stopAnimation() {
       this.isAnimating = false;
 
-      // Clear the symbols one by one with a timout in between
+      // Clear the symbols one by one
       this.symbols.forEach((symbol, i) => {
         setTimeout(() => {
           symbol.clear(ctx);
@@ -490,12 +477,8 @@
     // Hide the project text
     projectText.style.opacity = 0;
 
-    //
-    // BACKGROUND
-    //
-
-    // Wait for the pixelify font to load before starting the canvas
-    let ready = await document.fonts.ready;
+    // Wait for the pixelify font to load before using it in the canvas background
+    await document.fonts.ready;
     initializeBackground();
   }
 

@@ -14,7 +14,6 @@
     containerGhost.removeEventListener("click", breakGlass);
 
     // Show cursor again
-
     container.classList.remove("game-emergencybox-hidden-cursor");
   }
 
