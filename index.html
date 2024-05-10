@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="./styles/games/wheel.css" />
     <link rel="stylesheet" href="./styles/games/slotmachine.css" />
     <link rel="stylesheet" href="./styles/games/emergencybox.css" />
+    <link rel="stylesheet" href="./styles/games/team-characters.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -17,6 +18,7 @@
     <script src="./js/games/wheel.js"></script>
     <script src="./js/games/slotmachine.js"></script>
     <script src="./js/games/emergencybox.js"></script>
+    <script src="./js/games/teamCharacters.js"></script>
   </head>
   <body>
     <section class="game-wheel">
@@ -322,6 +324,67 @@
             class="game-emergencybox-box"
           />
         </picture>
+      </div>
+    </section>
+    <section class="team-characters-container">
+      <div class="team-characters-wrapper">
+        <h1 class="team-characters-heading">choose <br />your fighter</h1>
+        <div class="team-characters-content">
+          <div class="team-characters-info-wrapper">
+            <div class="team-characters-info-field team-characters-info-field--name">
+              duane wiegan
+            </div>
+            <div class="team-characters-info-field team-characters-info-field--power">
+              <p class="team-characters-power-name">can read minds</p>
+              <div class="team-characters-power-bar-wrapper">
+                <div class="team-characters-power-bar"></div>
+                <p class="team-characters-power-percentage">100%</p>
+              </div>
+            </div>
+            <div class="team-characters-info-field team-characters-info-field--power">
+              <p class="team-characters-power-name">fastest email reply</p>
+              <div class="team-characters-power-bar-wrapper">
+                <div class="team-characters-power-bar"></div>
+                <p class="team-characters-power-percentage">100%</p>
+              </div>
+            </div>
+          </div>
+          <div class="team-characters-carousel-container">
+            <div class="team-characters-carousel-wrapper">
+              <button
+                id="team-characters-btn-left"
+                class="team-characters-carousel-arrow-btn team-characters-carousel-arrow-btn--left"
+              >
+                <img src="./images/games/team-characters/arrow-left.png" alt="Back icon" />
+              </button>
+              <div id="team-characters-carousel" class="team-characters-carousel">
+                <img
+                  class="team-characters-carousel-item"
+                  src="./images/games/team-characters/duane-wiegand.png"
+                  alt="Fortnite character representing one of the team members"
+                />
+                <img
+                  class="team-characters-carousel-item"
+                  src="./images/games/team-characters/2.png"
+                  alt="Fortnite character representing one of the team members"
+                />
+                <img
+                  class="team-characters-carousel-item"
+                  src="./images/games/team-characters/3.png"
+                  alt="Fortnite character representing one of the team members"
+                />
+              </div>
+              <button
+                id="team-characters-btn-right"
+                class="team-characters-carousel-arrow-btn team-characters-carousel-arrow-btn--right"
+              >
+                <img src="./images/games/team-characters/arrow-right.png" alt="Forward icon" />
+              </button>
+            </div>
+            <div class="team-characters-carousel-circle"></div>
+          </div>
+          <button class="team-characters-choose-btn">choose your fighter</button>
+        </div>
       </div>
     </section>
   </body>
