@@ -1,16 +1,116 @@
 .team-characters-container {
-  background-color: rgba(255, 0, 0, 0.123);
+  background-image: url("../../images/games/team-characters/background.png");
+  background-position: center center;
+  background-size: cover;
   position: relative;
+  padding: 80px 0;
+  --effect-color: #73f6de;
+  --background-color-blue: #a5ffef;
+}
+
+.team-characters-heading,
+.team-characters-container p,
+.team-characters-choose-btn {
+  font-family: "DM Serif Display", serif;
+  font-weight: 400;
+  font-style: normal;
+  color: #fff;
+  text-transform: uppercase;
 }
 
 .team-characters-wrapper {
-  max-width: 960px;
+  max-width: 1200px;
   margin: 0 auto;
+}
+
+.team-characters-heading {
+  line-height: 1;
+  letter-spacing: 0.5px;
+  font-size: 80px;
 }
 
 .team-characters-content {
   display: flex;
   justify-content: space-between;
+}
+
+/* Character info */
+
+.team-characters-info-wrapper {
+  min-width: 380px;
+}
+
+.team-characters-info-field {
+  margin-bottom: 16px;
+  width: 100%;
+  height: 54px;
+  position: relative;
+}
+
+.team-characters-info-field:before {
+  content: "";
+  position: absolute;
+  top: 20%;
+  left: 0;
+  width: 100%;
+  height: 80%;
+  background: var(--effect-color);
+  filter: blur(10px);
+  /* z-index: -1; */
+  transform: scale(0.9);
+}
+
+.team-characters-info-field-background {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.team-characters-info-field-content {
+  height: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 0 48px;
+}
+
+.team-characters-info-field-content--name {
+  justify-content: center;
+}
+
+.team-characters-info-field-content--power {
+  justify-content: space-between;
+}
+
+.team-characters-info-field--name {
+  font-size: 20px;
+}
+
+.team-characters-info-field--power {
+  font-size: 12px;
+}
+
+.team-characters-power-bar {
+  height: 5px;
+  width: 45%;
+  background-color: var(--background-color-blue);
+  border-radius: 5px;
+  position: relative;
+}
+
+.team-characters-power-bar::before {
+  content: "100%";
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  color: #fff;
+  text-transform: uppercase;
+  font-size: 10px;
+  position: absolute;
+  right: 2px;
+  top: 5px;
 }
 
 /* Carousel */
@@ -27,6 +127,7 @@
   top: 50%;
   transform: translateY(-50%);
   cursor: pointer;
+  border: none;
 }
 
 .team-characters-carousel-arrow-btn--left {
@@ -40,12 +141,18 @@
 .team-characters-carousel-wrapper {
   display: flex;
   overflow: hidden;
-  max-width: 400px;
+  max-width: 500px;
 }
 
 .team-characters-carousel {
   display: flex;
   gap: 100px;
+}
+
+.team-characters-carousel-item {
+  width: 500px;
+  display: flex;
+  justify-content: center;
 }
 
 .team-characters-carousel.sliding-transition {
@@ -57,8 +164,22 @@
   height: 12%;
   bottom: 0;
   transform: translateY(25%);
-  background: red;
+  background: var(--background-color-blue);
   border-radius: 50%;
   position: absolute;
   z-index: -10;
+  opacity: 0.2;
+  box-shadow: 0 10px 20px 5px var(--effect-color);
+  /* in order: x offset, y offset, blur size, spread size, color */
+}
+
+/* Button */
+.team-characters-choose-btn {
+  background-color: #0000ff;
+  font-size: 20px;
+  padding: 0.9em 1.8em;
+  align-self: center;
+  text-decoration: none;
+  box-shadow: 0 4px 12px 0 var(--effect-color);
+  /* in order: x offset, y offset, blur size, spread size, color */
 }
