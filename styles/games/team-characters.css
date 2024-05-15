@@ -209,6 +209,11 @@
   /* in order: x offset, y offset, blur size, spread size, color */
 }
 
+.team-characters-carousel-circle.resize-transition {
+  /* @keyframes duration | easing-function | delay | name */
+  transition: scale 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
 /* Button */
 .team-characters-choose-btn {
   width: fit-content;

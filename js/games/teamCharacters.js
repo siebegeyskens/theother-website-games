@@ -18,11 +18,9 @@
   ];
   let currentIndex = 0; // State
   let prevIndex, itemWidth, totalItems; // State
-  let items, prevArrow, nextArrow, carousel; // DOM elements (carousel)
+  let items, prevArrow, nextArrow, carousel, circle; // DOM elements (carousel)
   let name, firstPower, secondPower; // DOM elements (info)
   let characterLink; // DOM elements (characterLink)
-
-  // TODO: window resize
 
   function enableArrows() {
     prevArrow.classList.remove("disabled"); // Remove disabled class
@@ -79,7 +77,6 @@
 
     powerBars.forEach((bar) => {
       bar.style.width = "0px";
-      console.log(bar.style.width);
     });
 
     // Handle DOM - info
@@ -91,8 +88,9 @@
     // Handle DOM - carousel
     // 0.
     disableArrows();
+    animateCircle();
     // 1. Add transition animation class
-    carousel.classList.add("sliding-transition");
+    //carousel.classList.add("sliding-transition");
     // 2. Move the carousel to the left by the width of one image
     carousel.style.transform = `translateX(-${itemWidth + 100}px)`; // 100px for the gap between the flex items
     // 3. After the transition is completed:
@@ -102,10 +100,21 @@
       // 1. Move the prevIndex image to the end of `carousel` DOM.
       carousel.appendChild(items[prevIndex]);
       // 2. Remove the class `sliding-transition` from carousel.
-      carousel.classList.remove("sliding-transition");
+      //carousel.classList.remove("sliding-transition");
       // 3. Remove the transform property as well, since we re-ordered the DOM.
       carousel.style.transform = "";
     }, 500);
+  }
+
+  function animateCircle() {
+    circle.style.scale = "0.8";
+    setTimeout(() => {
+      circle.classList.add("resize-transition");
+      circle.style.scale = "1";
+    }, 50);
+    setTimeout(() => {
+      circle.classList.remove("resize-transition");
+    }, 550);
   }
 
   function handlePrevClick() {
@@ -121,6 +130,7 @@
     // Handle DOM - carousel
     // 0.
     disableArrows();
+    animateCircle();
     // 1. Move the currentIndex image to the beginning of `carousel` DOM.
     carousel.prepend(items[currentIndex]);
     // 2. Move the carousel to the left by the width of one image
@@ -128,7 +138,7 @@
     // 3. Set a timeout to avoid the browser batching
     setTimeout(() => {
       // 4. Add transition animation class
-      carousel.classList.add("sliding-transition");
+      //carousel.classList.add("sliding-transition");
       // 5. Move the carousel to the right by the width of one image (slide in the appended image)
       carousel.style.transform = "";
       //carousel.style.transform = `translateX(${itemWidth}px)`;
@@ -137,7 +147,7 @@
       // By removing the transition class, we ensure that the transition only occurs when we want it to and that we have full control over the carousel's movement.
 
       enableArrows();
-      carousel.classList.remove("sliding-transition");
+      // carousel.classList.remove("sliding-transition");
     }, 500);
   }
 
@@ -155,12 +165,18 @@
     upDateCharacterLink();
   }
 
+  window.addEventListener("resize", () => {
+    itemWidth = items[0].getBoundingClientRect().width;
+    console.log(itemWidth);
+  });
+
   window.addEventListener("load", () => {
     // Grab elements (carousel)
     items = [...document.getElementsByClassName("team-characters-carousel-item")];
     nextArrow = document.getElementById("team-characters-btn-right");
     prevArrow = document.getElementById("team-characters-btn-left");
     carousel = document.getElementById("team-characters-carousel");
+    circle = document.getElementById("team-characters-carousel-circle");
     // Grab elements (info)
     name = document.getElementById("team-characters-info-name");
     firstPower = document.getElementById("team-characters-power--first");
